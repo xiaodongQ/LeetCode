@@ -2,10 +2,10 @@
  * @Description: two Sum
  * @Author: xd
  * @Date: 2019-10-24 21:21:52
- * @LastEditTime: 2019-10-25 00:37:44
+ * @LastEditTime: 2019-10-25 01:10:34
  * @LastEditors: xd
  * @Note: 
- * sourece: https://leetcode-cn.com/problems/two-sum/
+ * source: https://leetcode-cn.com/problems/two-sum/
  * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
  * You may assume that each input would have exactly one solution, and you may not use the same element twice.
  * 
