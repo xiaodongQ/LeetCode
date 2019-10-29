@@ -2,7 +2,7 @@
  * @Description: two Sum
  * @Author: xd
  * @Date: 2019-10-24 21:21:52
- * @LastEditTime: 2019-10-25 09:04:46
+ * @LastEditTime: 2019-10-29 08:57:48
  * @LastEditors: xd
  * @Note: 
  * source: https://leetcode-cn.com/problems/two-sum/
@@ -18,6 +18,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <unordered_map>
 using namespace std;
 
 class Solution {
@@ -47,7 +48,7 @@ public:
     // 结果：执行用时:12 ms, cpp中>91.26%; 内存消耗:9.9MB, cpp中>44.19%，每次执行消耗依赖用例集(并不说明优于twoSum3)
     // 时间：O(n) 空间：O(n)
     vector<int> twoSum2(vector<int>& numkus, int target) {
-        map<int, int> mapNum;
+        unordered_map<int, int> mapNum;
         for(int iIndex1 = 0; iIndex1 < numkus.size(); iIndex1++)
         {
             if (mapNum.find(numkus[iIndex1]) == mapNum.end())
@@ -74,7 +75,7 @@ public:
     // 结果：执行用时:16 ms, cpp中>77.45%; 内存消耗:9.9MB, cpp中>44.03%
     // 时间：O(n) 空间：O(n)
     vector<int> twoSum3(vector<int>& numkus, int target) {
-        map<int, int> mapNum;
+        unordered_map<int, int> mapNum;
         for(int iIndex1 = 0; iIndex1 < numkus.size(); iIndex1++)
         {
             if (mapNum.find(target - numkus[iIndex1]) == mapNum.end())
