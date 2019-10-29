@@ -1,9 +1,13 @@
 package main
+
+import (
+	"fmt"
+)
 /*
  * @Description:
  * @Author: xd
  * @Date: 2019-10-29 08:42:51
- * @LastEditTime: 2019-10-29 20:00:17
+ * @LastEditTime: 2019-10-29 23:43:35
  * @LastEditors: xd
  * @Note:
 	source: https://leetcode-cn.com/problems/two-sum/
@@ -19,10 +23,15 @@ package main
 func twoSum(nums []int, target int) []int {
 	mapInt := make(map[int]int)
 	for index, i := range nums {
-		if mapInt.
+	
 	}
+	retrun [2]int{}
 }
 
 func main() {
-
+	nums := [2, 7, 11, 15]
+	target := 9
+	map1 := make(map[int]int)
+	err, res := twoSum(nums, target)
+	
 }
