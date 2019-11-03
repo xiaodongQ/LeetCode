@@ -1,15 +1,8 @@
-package main
-
-import (
-	"fmt"
-	"net"
-)
-
 /*
  * @Description:
  * @Author: xd
  * @Date: 2019-10-29 08:42:51
- * @LastEditTime: 2019-11-03 17:50:35
+ * @LastEditTime: 2019-11-03 19:41:50
  * @LastEditors: xd
  * @Note:
 	source: https://leetcode-cn.com/problems/two-sum/
@@ -21,6 +14,13 @@ import (
 	Because nums[0] + nums[1] = 2 + 7 = 9,
 	return [0, 1].
 */
+
+package main
+
+import (
+	"fmt"
+	"net"
+)
 
 // 结果：执行用时:4 ms, golang中>97.39%; 内存消耗:3.7MB, golang中>46.28%
 // 时间：O(n) 空间：O(n)
