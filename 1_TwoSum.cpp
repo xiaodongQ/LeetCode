@@ -2,7 +2,7 @@
  * @Description: two Sum
  * @Author: xd
  * @Date: 2019-10-24 21:21:52
- * @LastEditTime: 2019-10-29 08:57:48
+ * @LastEditTime: 2019-11-03 15:30:29
  * @LastEditors: xd
  * @Note: 
  * source: https://leetcode-cn.com/problems/two-sum/
@@ -103,7 +103,7 @@ int main(int argc, char const *argv[])
     numkus.push_back(7);
     numkus.push_back(11);
     numkus.push_back(15);
-    int target = 9;
+    int target = 22;
 
     numres = sol.twoSum(numkus, target);
     for (auto index : numres)
