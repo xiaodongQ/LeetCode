@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: xd
  * @Date: 2019-10-29 08:37:08
- * @LastEditTime: 2019-11-03 22:23:47
+ * @LastEditTime: 2019-11-07 22:26:50
  * @LastEditors: xd
  * @Note: 
  * source: https://leetcode-cn.com/problems/add-two-numbers
@@ -33,11 +33,15 @@ struct ListNode {
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        //传入的事已经拆分好了的数字链表，遍历叠加即可，注意链表结束的边界条件
+        //传入的是已经拆分好了的数字链表，遍历叠加即可，注意链表结束的边界条件
         //确保传入的是非空链表
         if (NULL == l1 || NULL == l2) {
             return NULL;
         }
-        for 
+        int flag = 0;
+        while(l1->next != NULL && l2->next != NULL)
+        {
+            
+        }
     }
 };
