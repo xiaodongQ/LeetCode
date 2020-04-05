@@ -96,7 +96,7 @@ func isPalindrome(head *ListNode) bool {
 func main() {
 	iArr := []int{1, 2, 3, 4, 5, 4, 3, 2, 1}
 	// iArr := []int{1, 3, 4, 5, 4, 3, 2, 1}
-	linkinfo := initLinkInfo(iArr)
+	linkinfo := InitLinkInfo(iArr)
 	// 打印链表信息
 	tempptr := linkinfo
 	for tempptr != nil {
@@ -113,7 +113,8 @@ func main() {
 	}
 }
 
-func initLinkInfo(intArr []int) *ListNode {
+// InitLinkInfo 构造一个链表
+func InitLinkInfo(intArr []int) *ListNode {
 	// 反向遍历
 	var preNodePtr *ListNode // 保存前一个位置的指针
 	for i := len(intArr) - 1; i >= 0; i-- {
