@@ -1,10 +1,17 @@
+/*
+ * @Description:
+ * @Author: xd
+ * @Date: 2020-04-05 23:26:07
+ * @LastEditTime: 2020-04-05 23:45:12
+ * @LastEditors: xd
+ * @Note:
+ * [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/submissions/)
+ */
 package main
 
 import (
 	"log"
 )
-
-// [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/submissions/)
 
 // ListNode 链表
 type ListNode struct {
@@ -94,9 +101,8 @@ func isPalindrome(head *ListNode) bool {
 }
 
 func main() {
-	iArr := []int{1, 2, 3, 4, 5, 4, 3, 2, 1}
-	// iArr := []int{1, 3, 4, 5, 4, 3, 2, 1}
-	linkinfo := InitLinkInfo(iArr)
+	var intArr = []int{1, 2, 3, 4, 5, 4, 3, 2, 1}
+	linkinfo := InitLinkInfo(intArr)
 	// 打印链表信息
 	tempptr := linkinfo
 	for tempptr != nil {
