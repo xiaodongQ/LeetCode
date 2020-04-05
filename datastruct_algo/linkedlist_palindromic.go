@@ -18,11 +18,14 @@ type ListNode struct {
 *     Val int
 *     Next *ListNode
 * }
+* 使用数组先存储链表结点的数据，再依次(len/2次)比较两头的数据是否满足回文
 * 执行用时 :16 ms, 在所有 Go 提交中击败了75.91%的用户
 * 内存消耗 :7.1 MB, 在所有 Go 提交中击败了19.51%的用户
+* 空间复杂度O(n)，时间复杂度 复制O(n)+判断O(n/2)=O(n)
  */
 func isPalindromeByArr(head *ListNode) bool {
 	if head == nil {
+		// 输入为空时当作满足回文
 		return true
 	}
 	valArr := make([]int, 0)
@@ -31,38 +34,63 @@ func isPalindromeByArr(head *ListNode) bool {
 		head = head.Next
 	}
 
-	for i := 0; i < len(valArr); i++ {
-		if i >= (len(valArr) / 2) {
-			return true
-		}
+	for i := 0; i < len(valArr)/2; i++ {
 		if valArr[i] != valArr[len(valArr)-1-i] {
 			return false
 		}
 	}
 
-	return false
+	return true
 }
 
+/*
+* 双指针，不同的步进长度
+* 执行用时 :16 ms, 在所有 Go 提交中击败了75.98%的用户
+* 内存消耗 :6 MB, 在所有 Go 提交中击败了79.41%的用户
+* 空间复杂度O(1), 时间复杂度 中间结点O(n/2)+反转O(n/2)+比较O(n/2)+反转O(n/2) = O(n)
+ */
 func isPalindrome(head *ListNode) bool {
+	if head == nil {
+		return true
+	}
 	// 遍历
-	var flag1 = head
-	var flag2 = head
-	nodeCount := 0
-	for flag1 != nil {
-		if flag2 == nil || flag2.Next == nil {
-			// 说明此时flag1到了中间点,flag2到了最后一个结点
-			break
+	var slow = head
+	var fast = head
+	// 这样能保证奇数个数时，slow在中间位置
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	// 从中间之后的后半部分(中间结点不算在后半部分)反转
+	var current = slow.Next
+	var previous *ListNode
+	for current != nil {
+		nextNode := current.Next
+		current.Next = previous
+		previous = current
+		current = nextNode
+	}
+
+	// 依次比较前半部分和反转后的后半部分的结点(个数以反转部分为准)
+	oriHead := head
+	for previous != nil {
+		if previous.Val != oriHead.Val {
+			return false
 		}
-		nodeCount++
-		flag1 = flag1.Next
-		flag2 = flag2.Next.Next
-	}
-	// 偶数次，则flag1位置为中间点
-	if nodeCount%2 == 0 {
-
+		previous = previous.Next
+		oriHead = oriHead.Next
 	}
 
-	return false
+	// 再对之前的反转还原
+	current = slow.Next
+	for current != nil {
+		nextNode := current.Next
+		current.Next = previous
+		previous = current
+		current = nextNode
+	}
+
+	return true
 }
 
 func main() {
@@ -76,8 +104,8 @@ func main() {
 		tempptr = tempptr.Next
 	}
 
-	// isPalindromic := judgePalindromic(linkinfo)
-	isPalindromic := isPalindromeByArr(linkinfo)
+	// isPalindromic := isPalindromeByArr(linkinfo)
+	isPalindromic := isPalindrome(linkinfo)
 	if isPalindromic {
 		log.Printf("linkinfo:%+v is Palindromic", linkinfo)
 	} else {
@@ -87,16 +115,16 @@ func main() {
 
 func initLinkInfo(intArr []int) *ListNode {
 	// 反向遍历
-	var nodePtr *ListNode // 保存前一个位置的指针
+	var preNodePtr *ListNode // 保存前一个位置的指针
 	for i := len(intArr) - 1; i >= 0; i-- {
-		note := ListNode{
+		node := ListNode{
 			Val:  intArr[i],
-			Next: nodePtr,
+			Next: preNodePtr,
 		}
-		nodePtr = &note
+		preNodePtr = &node
 	}
 
-	return nodePtr
+	return preNodePtr
 }
 
 func init() {
