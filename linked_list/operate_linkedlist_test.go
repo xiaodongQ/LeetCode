@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-07 23:25:59
+ * @LastEditTime: 2020-04-08 00:30:25
  * @LastEditors: xd
  * @Note:
  */
@@ -176,6 +176,12 @@ func reverseList(head *ListNode) *ListNode {
 * 对于首结点，递归调用行层层返回尾结点的指针，然后继续执行下去(此时是递归最外层，已经没有其他递归了)
 	执行将首结点的下一个结点指向首结点，然后首结点的Next置nil，
 	然后整个调用就结束了
+* [反转链表](https://leetcode-cn.com/problems/reverse-linked-list/solution/fan-zhuan-lian-biao-by-leetcode/)
+
+* 执行用时 :4 ms, 在所有 Go 提交中击败了15.20%的用户
+* 内存消耗 :2.9 MB, 在所有 Go 提交中击败了21.31%的用户
+* 单看提交的时间和内存消耗，都是比上面(迭代法)多的，但是由于用例的随机，不好准确下结论
+* 时间复杂度 O(n)，空间O(n)，使用递归会使用到栈，递归深度为n
 */
 func reverseListRecursion(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
@@ -217,4 +223,48 @@ func middleNode(head *ListNode) *ListNode {
 	}
 
 	return slow
+}
+
+/*
+* 给定两个（单向）链表，判定它们是否相交并返回交点。
+* 请注意相交的定义基于节点的引用，而不是基于节点的值。
+* 换句话说，如果一个链表的第k个节点与另一个链表的第j个节点是同一节点（引用完全相同），则这两个链表相交
+* 说明：如果两个链表没有交点，返回 null；
+	在返回结果后，两个链表仍须保持原有的结构；
+	可假定整个链表结构中没有循环；
+	程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存；
+* [面试题 02.07. 链表相交](https://leetcode-cn.com/problems/intersection-of-two-linked-lists-lcci/)
+
+* 审题(结合链接中的示例更好理解)：
+	有结点的指针相同才表示相交，指针相同表示其后面的指向是完全一样的，即有相同的链表结点结构
+	如示例中的listA = [4,1,8,4,5]，listB = [5,0,1,8,4,5]，两个链表值1,8,4,5结构相同，
+	说明值为1的结点是在同一个位置(即相交于该结点，结点指针相同)，而并不是看有相同的值的单个点
+* 只想到最直接的暴力法。。。两层循环，依次检查结点指针是否存在于另一个链表中，时间复杂度O(n^2)
+* 链接中的解法：listA和listB相交于结点D，则不管哪个链表，从D到尾结点C的链表结构是完全一样的
+	于是用两个指针分别从listA和listB出发，以步长1各自完整走完两个链表，则两个指针相等时即为交点
+	因为交点后的结点完全一样，完整走完的长度也都是AD+BD+DC
+	所以若有相交，则前面肯定会在某个点相交；若无相交，则最后走完也不会出现指针相同
+	并且都是走了两个链表，步长是一样的，若无相交，最后pA==pB==nil，因此不存在死循环
+* [双指针法](https://leetcode-cn.com/problems/intersection-of-two-linked-lists-lcci/solution/dai-ma-jie-shi-shuang-zhi-zhen-suan-fa-wei-shi-yao/)
+* 执行用时 :40 ms, 在所有 Go 提交中击败了92.63%的用户
+* 内存消耗 :8.4 MB, 在所有 Go 提交中击败了100.00%的用户
+*/
+func getIntersectionNode(headA, headB *ListNode) *ListNode {
+	var pA = headA
+	var pB = headB
+	for pA != pB {
+		if pA != nil {
+			pA = pA.Next
+		} else {
+			pA = headB
+		}
+
+		if pB != nil {
+			pB = pB.Next
+		} else {
+			pB = headA
+		}
+	}
+
+	return pA
 }
