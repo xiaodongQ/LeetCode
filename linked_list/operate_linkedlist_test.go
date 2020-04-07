@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-06 13:58:14
+ * @LastEditTime: 2020-04-07 23:25:59
  * @LastEditors: xd
  * @Note:
  */
@@ -134,6 +134,7 @@ func kthToLast2(head *ListNode, k int) int {
 * 定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
 * 说明：0 <= 节点个数 <= 5000
 * [面试题24. 反转链表](https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/)
+* [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
 
 * 执行用时 :0 ms, 在所有 Go 提交中击败了100.00%的用户
 * 内存消耗 :2.6 MB, 在所有 Go 提交中击败了100.00%的用户
@@ -156,6 +157,35 @@ func reverseList(head *ListNode) *ListNode {
 		head = next
 	}
 	return previous
+}
+
+/*
+* 递归方式
+* 从第一个结点开始进入递归，把当前结点(head)的后一个结点的Next指向当前结点(head)；
+*
+* 第一个结点的处理依旧还停留在递归调用的那行语句，后续的递归分析：
+
+* 进入递归后(调用递归的那行语句)会直到递归到最后一个结点，
+	最后一个结点(也是最后一层)传入递归调用时，触发终止条件(head.Next==nil)，返回最后结点的指针
+	往上每层的递归返回，都是将最后结点的指针层层返回上去
+* 每层递归中除了层层返回最后结点的指针外，还会把传入结点的后一个结点指向传入结点
+	并将传入结点的Next置nil(从最后一个结点看好理解一点)
+	所以里层的递归将传入结点(假设称A)的Next置nil，而外面一层递归(传入的是A的上一个结点B)又将A(即B的下一个结点)的Next指向B
+	所以对每个非首结点(还没执行到下一行)和非尾结点(只改了一次Next而没有置nil，而且是传入其上一个结点的那层递归改的)来说，
+	其Next都是先置为nil，再置为其上一个结点的指针
+* 对于首结点，递归调用行层层返回尾结点的指针，然后继续执行下去(此时是递归最外层，已经没有其他递归了)
+	执行将首结点的下一个结点指向首结点，然后首结点的Next置nil，
+	然后整个调用就结束了
+*/
+func reverseListRecursion(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	p := reverseListRecursion(head.Next) // 递归调用行，直到最后一个结点触发终止条件
+	head.Next.Next = head
+	head.Next = nil
+
+	return p
 }
 
 /*
