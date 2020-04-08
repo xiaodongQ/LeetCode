@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-05 23:45:12
+ * @LastEditTime: 2020-04-08 21:50:47
  * @LastEditors: xd
  * @Note:
  * [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/submissions/)
@@ -132,6 +132,17 @@ func InitLinkInfo(intArr []int) *ListNode {
 	}
 
 	return preNodePtr
+}
+
+// ConvertLinkInfo 用于打印链表
+func ConvertLinkInfo(head *ListNode) []int {
+	var intArr []int
+	for head != nil {
+		intArr = append(intArr, head.Val)
+		head = head.Next
+	}
+
+	return intArr
 }
 
 func init() {

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-08 00:30:25
+ * @LastEditTime: 2020-04-08 23:01:38
  * @LastEditors: xd
  * @Note:
  */
@@ -143,18 +143,18 @@ func kthToLast2(head *ListNode, k int) int {
 func TestReverseList(t *testing.T) {
 	var intArr = []int{1, 2, 3, 4, 5}
 	linkinfo := InitLinkInfo(intArr)
-	log.Printf("%+v, return:%+v", intArr, reverseList(linkinfo))
+	log.Printf("\ninit:%+v, return:%+v", intArr, ConvertLinkInfo(reverseList(linkinfo)))
 }
 func reverseList(head *ListNode) *ListNode {
 	var previous *ListNode
-	var next *ListNode
+	var Next *ListNode
 	for head != nil {
 		// 先保存下一个结点
-		next = head.Next
+		Next = head.Next
 
 		head.Next = previous
 		previous = head
-		head = next
+		head = Next
 	}
 	return previous
 }
@@ -207,7 +207,7 @@ func reverseListRecursion(head *ListNode) *ListNode {
 func TestMiddleNode(t *testing.T) {
 	var intArr = []int{1, 2, 3, 4, 5}
 	linkinfo := InitLinkInfo(intArr)
-	log.Printf("%+v, return:%+v", intArr, middleNode(linkinfo))
+	log.Printf("\ninit:%+v, return:%+v", intArr, ConvertLinkInfo(middleNode(linkinfo)))
 }
 func middleNode(head *ListNode) *ListNode {
 	// 双指针法，fast步长为2
@@ -248,6 +248,7 @@ func middleNode(head *ListNode) *ListNode {
 * [双指针法](https://leetcode-cn.com/problems/intersection-of-two-linked-lists-lcci/solution/dai-ma-jie-shi-shuang-zhi-zhen-suan-fa-wei-shi-yao/)
 * 执行用时 :40 ms, 在所有 Go 提交中击败了92.63%的用户
 * 内存消耗 :8.4 MB, 在所有 Go 提交中击败了100.00%的用户
+* 时间O(n)，空间O(1)
 */
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	var pA = headA
@@ -267,4 +268,44 @@ func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	}
 
 	return pA
+}
+
+/*
+* 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+* [面试题 02.01. 移除重复节点](https://leetcode-cn.com/problems/remove-duplicate-node-lcci/)
+* 说明：链表长度在[0, 20000]范围内；链表元素在[0, 20000]范围内
+
+* 执行用时 :16 ms, 在所有 Go 提交中击败了80.15%的用户
+* 内存消耗 :6.1 MB, 在所有 Go 提交中击败了100.00%的用户
+* 时间O(n)，空间O(n)
+ */
+func TestRemoveDuplicateNodes(t *testing.T) {
+	var intArr = []int{1, 2, 1, 2, 5}
+	linkinfo := InitLinkInfo(intArr)
+	log.Printf("\ninit:%+v, return:%+v", intArr, ConvertLinkInfo(removeDuplicateNodes(linkinfo)))
+}
+func removeDuplicateNodes(head *ListNode) *ListNode {
+	// 遍历将链表中的值放到一个set中(go不提供set，可用map的key来区分)，若放不进则为重复，则移除
+	// 值为key，结点指针为value
+	if head == nil {
+		return nil
+	}
+	// 指定20000的容量，速度更慢一些，需要预估数据量和非重复值的规模
+	var linkmap = make(map[int]bool)
+	linkmap[head.Val] = true
+	var cur = head.Next
+	var preNode = head
+
+	for cur != nil {
+		if _, ok := linkmap[cur.Val]; ok {
+			// set中存在结点则从链表中移除，让当前结点的前结点指向当前下个结点即可
+			preNode.Next = cur.Next
+		} else {
+			linkmap[cur.Val] = true
+			// 只有放到set中的结点才需记前结点
+			preNode = cur
+		}
+		cur = cur.Next
+	}
+	return head
 }
