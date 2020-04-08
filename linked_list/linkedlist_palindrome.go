@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-08 21:50:47
+ * @LastEditTime: 2020-04-08 23:18:17
  * @LastEditors: xd
  * @Note:
  * [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/submissions/)
@@ -124,11 +124,11 @@ func InitLinkInfo(intArr []int) *ListNode {
 	// 反向遍历
 	var preNodePtr *ListNode // 保存前一个位置的指针
 	for i := len(intArr) - 1; i >= 0; i-- {
-		node := ListNode{
+		node := &ListNode{
 			Val:  intArr[i],
 			Next: preNodePtr,
 		}
-		preNodePtr = &node
+		preNodePtr = node
 	}
 
 	return preNodePtr
@@ -137,9 +137,10 @@ func InitLinkInfo(intArr []int) *ListNode {
 // ConvertLinkInfo 用于打印链表
 func ConvertLinkInfo(head *ListNode) []int {
 	var intArr []int
-	for head != nil {
-		intArr = append(intArr, head.Val)
-		head = head.Next
+	cur := head
+	for cur != nil {
+		intArr = append(intArr, cur.Val)
+		cur = cur.Next
 	}
 
 	return intArr

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-08 23:01:38
+ * @LastEditTime: 2020-04-09 00:19:21
  * @LastEditors: xd
  * @Note:
  */
@@ -71,6 +71,60 @@ func deleteNode(node *ListNode) {
 	   执行用时 :16 ms, 在所有 C++ 提交中击败了24.86%的用户
 	   内存消耗 :8 MB, 在所有 C++ 提交中击败了100.00%的用户
 	*/
+}
+
+/*
+* 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。返回删除后的链表的头节点。
+* 说明：题目1保证链表中节点的值互不相同、2可能相同
+* [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
+
+* [面试题18. 删除链表的节点](https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
+* 1保证链表中节点的值互不相同
+* 执行用时 :4 ms, 在所有 Go 提交中击败了79.22%的用户
+* 内存消耗 :2.9 MB, 在所有 Go 提交中击败了100.00%的用户
+* 时间O(n)，空间O(1)
+ */
+func TestDeleteNode2(t *testing.T) {
+	var intArr = []int{1, 2, 6, 3, 4, 5, 6}
+	k := 6
+	linkinfo := InitLinkInfo(intArr)
+	log.Printf("\ninit:%+v, k:%d, return:%+v", intArr, k, ConvertLinkInfo(deleteNode2(linkinfo, k)))
+}
+func deleteNode2(head *ListNode, val int) *ListNode {
+	// 不去改传入的指针
+	cur := head
+	var pre *ListNode
+	for cur != nil {
+		// 本身为最后一个结点
+		if cur.Val == val {
+			/*
+				// 互不相同可用直接return
+				if cur.Next == nil {
+					if pre == nil {
+						return nil
+					}
+					pre.Next = nil
+				} else {
+					cur.Val = cur.Next.Val
+					cur.Next = cur.Next.Next
+				}
+				return head
+			*/
+			if cur.Next == nil {
+				if pre == nil {
+					return nil
+				}
+				pre.Next = nil
+			} else {
+				cur.Val = cur.Next.Val
+				cur.Next = cur.Next.Next
+			}
+			continue
+		}
+		pre = cur
+		cur = cur.Next
+	}
+	return head
 }
 
 /*
@@ -234,6 +288,8 @@ func middleNode(head *ListNode) *ListNode {
 	可假定整个链表结构中没有循环；
 	程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存；
 * [面试题 02.07. 链表相交](https://leetcode-cn.com/problems/intersection-of-two-linked-lists-lcci/)
+* [面试题52. 两个链表的第一个公共节点](https://leetcode-cn.com/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/)
+* [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
 
 * 审题(结合链接中的示例更好理解)：
 	有结点的指针相同才表示相交，指针相同表示其后面的指向是完全一样的，即有相同的链表结点结构
@@ -250,6 +306,16 @@ func middleNode(head *ListNode) *ListNode {
 * 内存消耗 :8.4 MB, 在所有 Go 提交中击败了100.00%的用户
 * 时间O(n)，空间O(1)
 */
+func TestGetIntersectionNode(t *testing.T) {
+	// 注意下面的测试用例是有问题的，并不是值，而是引用(指针地址)相同，题目链接中先给定哪一个结点地址相同，
+	// 比如前提给的值为8的结点为同一个结点指针，所以值为1的结点只是在两个链表中的不同结点，只是值都为1而已
+	// 正确的用例应该是先定义链表结点，再根据结点组织成两个链表，链表中有预先定义的同一个结点即为相交
+	var intArr1 = []int{4, 1, 8, 4, 5}
+	var intArr2 = []int{5, 0, 1, 8, 4, 5}
+	linkinfo1 := InitLinkInfo(intArr1)
+	linkinfo2 := InitLinkInfo(intArr2)
+	log.Printf("\ninit:%+v, %+v, return:%+v", ConvertLinkInfo(linkinfo1), ConvertLinkInfo(linkinfo2), ConvertLinkInfo(getIntersectionNode(linkinfo1, linkinfo2)))
+}
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	var pA = headA
 	var pB = headB
