@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-09 23:29:04
+ * @LastEditTime: 2020-04-10 00:23:29
  * @LastEditors: xd
  * @Note:
  */
@@ -379,6 +379,10 @@ func TestRemoveDuplicateNodes(t *testing.T) {
 	var intArr = []int{1, 2, 1, 2, 5}
 	linkinfo := InitLinkInfo(intArr)
 	log.Printf("\ninit:%+v, return:%+v", intArr, ConvertLinkInfo(removeDuplicateNodes(linkinfo)))
+
+	intArr = []int{1, 1, 2, 3, 3}
+	linkinfo = InitLinkInfo(intArr)
+	log.Printf("\ninit:%+v, return:%+v", intArr, ConvertLinkInfo(removeDuplicateNodesFromOrderList(linkinfo)))
 }
 func removeDuplicateNodes(head *ListNode) *ListNode {
 	// 遍历将链表中的值放到一个set中(go不提供set，可用map的key来区分)，若放不进则为重复，则移除
@@ -404,4 +408,57 @@ func removeDuplicateNodes(head *ListNode) *ListNode {
 		cur = cur.Next
 	}
 	return head
+}
+
+/*
+* 上面为有序链表的变种，对于有序链表则操作简单得多：
+* [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+* 排好序的队列，并不需要set来区分是否重复，注意审题。可以简化很多操作
+* 有序链表中删除重复元素
+* 只管相邻两个元素，然后依次迭代
+* 执行用时 :4 ms, 在所有 Go 提交中击败了88.56%的用户
+* 内存消耗 :3.1 MB, 在所有 Go 提交中击败了70.83%的用户
+ */
+func removeDuplicateNodesFromOrderList(head *ListNode) *ListNode {
+	cur := head
+	for cur != nil {
+		if cur.Next != nil && cur.Val == cur.Next.Val {
+			cur.Next = cur.Next.Next
+		} else {
+			cur = cur.Next
+		}
+	}
+	return head
+}
+
+/*
+* 给定一个链表，判断链表中是否有环。
+* 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。
+	如果 pos 是 -1，则在该链表中没有环。演示是否有环，参考链接中的示例(访问pos表示成员的索引)
+* [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+* 执行用时 :12 ms, 在所有 Go 提交中击败了20.61%的用户
+* 内存消耗 :3.8 MB, 在所有 Go 提交中击败了58.93%的用户
+* 时间O(n)，空间O(1)
+	对于无环情况，O(n)；
+	有环情况，无环部分迭代次数N+有环迭代次数K = O(N+K) = O(n)
+		快慢指针速度差为1步，两个指针都进入环时(最坏情况是要追赶K步)，每移动一次，快指针以速度1接近慢指针，直到追上，
+		因此环中迭代次数为：环长度K/1 = K
+*/
+func hasCycle(head *ListNode) bool {
+	// 方法1：遍历链表，用set来判断结点指针是否重复，时间O(n)，空间O(n)
+	// 方法2：双指针，对于有环和无环情况下的复杂度分析O(N+K)，链接中解释得很清楚(自己想过一下双指针，但是复杂度计算没考虑全)
+	if head == nil || head.Next == nil {
+		return false
+	}
+	slow, fast := head, head.Next
+	for slow != fast {
+		// 快指针达到队尾，且没有下一个结点了，则无环
+		if fast == nil || fast.Next == nil {
+			return false
+		}
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return true
 }
