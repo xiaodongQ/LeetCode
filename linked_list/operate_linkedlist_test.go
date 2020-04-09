@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-09 00:19:21
+ * @LastEditTime: 2020-04-09 23:29:04
  * @LastEditors: xd
  * @Note:
  */
@@ -77,25 +77,33 @@ func deleteNode(node *ListNode) {
 * 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。返回删除后的链表的头节点。
 * 说明：题目1保证链表中节点的值互不相同、2可能相同
 * [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
+* 执行用时 :20 ms, 在所有 Go 提交中击败了14.82%的用户
+* 内存消耗 :4.7 MB, 在所有 Go 提交中击败了70.59%的用户
+* 时间O(n)，空间O(1)
 
 * [面试题18. 删除链表的节点](https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
 * 1保证链表中节点的值互不相同
 * 执行用时 :4 ms, 在所有 Go 提交中击败了79.22%的用户
 * 内存消耗 :2.9 MB, 在所有 Go 提交中击败了100.00%的用户
 * 时间O(n)，空间O(1)
- */
+	对于时间复杂度，最好第一个即为要删除的结点O(1) 最坏最后一个O(n) 算上概率：(1+n)n/2 * 1/n = (1+n)/2 = O(n)
+*/
 func TestDeleteNode2(t *testing.T) {
 	var intArr = []int{1, 2, 6, 3, 4, 5, 6}
 	k := 6
 	linkinfo := InitLinkInfo(intArr)
 	log.Printf("\ninit:%+v, k:%d, return:%+v", intArr, k, ConvertLinkInfo(deleteNode2(linkinfo, k)))
+
+	intArr = []int{1, 1}
+	k = 1
+	linkinfo = InitLinkInfo(intArr)
+	log.Printf("\ninit:%+v, k:%d, return:%+v", intArr, k, ConvertLinkInfo(deleteNodeBySentinel(linkinfo, k)))
 }
 func deleteNode2(head *ListNode, val int) *ListNode {
 	// 不去改传入的指针
 	cur := head
 	var pre *ListNode
 	for cur != nil {
-		// 本身为最后一个结点
 		if cur.Val == val {
 			/*
 				// 互不相同可用直接return
@@ -115,16 +123,38 @@ func deleteNode2(head *ListNode, val int) *ListNode {
 					return nil
 				}
 				pre.Next = nil
-			} else {
-				cur.Val = cur.Next.Val
-				cur.Next = cur.Next.Next
+				return head
 			}
+			cur.Val = cur.Next.Val
+			cur.Next = cur.Next.Next
 			continue
 		}
 		pre = cur
 		cur = cur.Next
 	}
 	return head
+}
+
+/*
+* 对于不保证各结点值唯一的链表，可利用一个哨兵结点来替换上面的解法(不用考虑结点为最后一个结点，以及prev一直是nil的情况)
+* 执行用时 :8 ms, 在所有 Go 提交中击败了91.81%的用户
+* 内存消耗 :4.7 MB, 在所有 Go 提交中击败了100.00%的用户
+* 时间O(n)，空间O(1)
+ */
+func deleteNodeBySentinel(head *ListNode, val int) *ListNode {
+	cur := head
+	// 创建一个哨兵结点，其指向头结点
+	sentinel := &ListNode{Next: head}
+	var pre = sentinel
+	for cur != nil {
+		if cur.Val == val {
+			pre.Next = cur.Next
+		} else {
+			pre = cur
+		}
+		cur = cur.Next
+	}
+	return sentinel.Next
 }
 
 /*
