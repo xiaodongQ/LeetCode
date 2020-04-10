@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-10 00:23:29
+ * @LastEditTime: 2020-04-10 23:08:45
  * @LastEditors: xd
  * @Note:
  */
@@ -461,4 +461,60 @@ func hasCycle(head *ListNode) bool {
 		fast = fast.Next.Next
 	}
 	return true
+}
+
+/*
+* 将两个升序链表合并为一个新的升序链表并返回。
+* 新链表是通过拼接给定的两个链表的所有节点组成的。
+* 示例：输入：1->2->4, 1->3->4
+	输出：1->1->2->3->4->4
+* [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+*/
+func TestMergeTwoLists(t *testing.T) {
+	var intArr1 = []int{1, 2, 4}
+	linkinfo1 := InitLinkInfo(intArr1)
+
+	intArr2 := []int{1, 3, 4}
+	linkinfo2 := InitLinkInfo(intArr2)
+	log.Printf("\ninit:%+v, %+v", intArr1, intArr2)
+	log.Printf("\ninit:%+v, %+v, return:%+v", intArr1, intArr2, ConvertLinkInfo(mergeTwoLists(linkinfo1, linkinfo2)))
+}
+
+/*
+递归
+*/
+func mergeTwoLists1(l1 *ListNode, l2 *ListNode) *ListNode {
+	// 双指针分别指向两个链表
+	if l1 == nil {
+		return l2
+	} else if l2 == nil {
+		return l1
+	} else if l1.Val < l2.Val {
+		l1.Next = mergeTwoLists1(l1.Next, l2)
+		return l1
+	} else {
+		l1.Next = mergeTwoLists1(l1.Next, l2)
+		return l1
+	}
+}
+
+/*
+迭代
+*/
+func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
+	// 依次将l2插入l1
+	s1 := &ListNode{Next: l1}
+	s2 := &ListNode{Next: l2}
+	// 以第一个链表为基准
+	for s2.Next != nil {
+		if s1.Next != nil && s2.Next.Val < s1.Next.Val {
+			// 比哨兵s1后面的结点小则插到s1哨兵后面
+			s2.Next = s1.Next.Next
+			s1.Next = s2.Next
+			s2 = s2.Next
+		} else {
+			s1 = s1.Next
+		}
+	}
+	return s1.Next
 }
