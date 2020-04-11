@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-05 23:26:07
- * @LastEditTime: 2020-04-10 23:08:45
+ * @LastEditTime: 2020-04-11 12:48:07
  * @LastEditors: xd
  * @Note:
  */
@@ -474,15 +474,95 @@ func TestMergeTwoLists(t *testing.T) {
 	var intArr1 = []int{1, 2, 4}
 	linkinfo1 := InitLinkInfo(intArr1)
 
-	intArr2 := []int{1, 3, 4}
+	intArr2 := []int{1, 3, 5}
 	linkinfo2 := InitLinkInfo(intArr2)
 	log.Printf("\ninit:%+v, %+v", intArr1, intArr2)
-	log.Printf("\ninit:%+v, %+v, return:%+v", intArr1, intArr2, ConvertLinkInfo(mergeTwoLists(linkinfo1, linkinfo2)))
+	log.Printf("\ninit:%+v, %+v, return:%+v", intArr1, intArr2, ConvertLinkInfo(mergeTwoLists1(linkinfo1, linkinfo2)))
 }
 
 /*
-递归
-*/
+* 依次将l2插入l1
+* 执行用时 :4 ms, 在所有 Go 提交中击败了68.73%的用户
+* 内存消耗 :2.5 MB, 在所有 Go 提交中击败了73.91%的用户
+* 时间O(n+m)，空间O(1)
+ */
+func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
+	// 依次将l2插入l1，定义一个l1链表的哨兵，其Next一直指向头结点(若链表为空则Next为nil)
+	if l1 == nil {
+		// 如果l1是空链表，则没必要把l2结点依次插入到l1的哨兵之后
+		return l2
+	}
+	s1 := &ListNode{Next: l1}
+
+	// 以第一个链表为基准
+	cur1 := l1
+	pre1 := s1
+	cur2 := l2
+	var temp *ListNode
+	for cur2 != nil {
+		if cur1 == nil {
+			// cur1没有结点了，则把l2剩余的所有结点插入到l1后面
+			pre1.Next = cur2
+			break
+		}
+
+		for cur1 != nil {
+			if cur2.Val < cur1.Val {
+				// l2中的当前结点值 比 l1当前结点小，则插入到l1当前结点之前，并将l2的当前结点后移
+				temp = cur2.Next
+
+				cur2.Next = cur1
+				pre1.Next = cur2
+				pre1 = pre1.Next
+
+				cur2 = temp
+				break
+			} else {
+				pre1 = cur1
+				cur1 = cur1.Next
+			}
+		}
+	}
+
+	return s1.Next
+}
+
+/*
+* 迭代，上面l2插入l1的思路方式，不够简洁；调整思路为：遍历l1,l2，向一个新的链表(通过哨兵进入)插入数据
+* 执行用时 :4 ms, 在所有 Go 提交中击败了68.73%的用户
+* 内存消耗 :2.5 MB, 在所有 Go 提交中击败了73.91%的用户
+* 时间O(n+m)，空间O(1)
+ */
+func mergeTwoLists3(l1 *ListNode, l2 *ListNode) *ListNode {
+	// 定义一个哨兵，不预设其Next指向谁，完成处理后其Next最后指向的结果链表头
+	// 依次迭代两个链表，向哨兵指向的链表中加结点
+	sentinel := &ListNode{}
+	pre := sentinel
+	for l1 != nil && l2 != nil {
+		if l1.Val <= l2.Val {
+			pre.Next = l1
+			l1 = l1.Next
+		} else {
+			pre.Next = l2
+			l2 = l2.Next
+		}
+		pre = pre.Next
+	}
+	// 上面结束后只会有一个链表为nil
+	if l1 == nil {
+		pre.Next = l2
+	} else {
+		pre.Next = l1
+	}
+	return sentinel.Next
+}
+
+/*
+* 递归
+* 执行用时 :4 ms, 在所有 Go 提交中击败了68.73%的用户
+* 内存消耗 :2.6 MB, 在所有 Go 提交中击败了23.19%的用户
+* 时间O(n+m)，空间O(n+m) (调用退出时，会将每个元素都遍历到，需要n+m个栈帧)
+ */
 func mergeTwoLists1(l1 *ListNode, l2 *ListNode) *ListNode {
 	// 双指针分别指向两个链表
 	if l1 == nil {
@@ -493,28 +573,7 @@ func mergeTwoLists1(l1 *ListNode, l2 *ListNode) *ListNode {
 		l1.Next = mergeTwoLists1(l1.Next, l2)
 		return l1
 	} else {
-		l1.Next = mergeTwoLists1(l1.Next, l2)
-		return l1
+		l2.Next = mergeTwoLists1(l1, l2.Next)
+		return l2
 	}
-}
-
-/*
-迭代
-*/
-func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
-	// 依次将l2插入l1
-	s1 := &ListNode{Next: l1}
-	s2 := &ListNode{Next: l2}
-	// 以第一个链表为基准
-	for s2.Next != nil {
-		if s1.Next != nil && s2.Next.Val < s1.Next.Val {
-			// 比哨兵s1后面的结点小则插到s1哨兵后面
-			s2.Next = s1.Next.Next
-			s1.Next = s2.Next
-			s2 = s2.Next
-		} else {
-			s1 = s1.Next
-		}
-	}
-	return s1.Next
 }
