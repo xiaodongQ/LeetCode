@@ -20,4 +20,8 @@ func main() {
 	var a int
 	var b int32
 	fmt.Printf("int len:%d, int32 len:%d\n", unsafe.Sizeof(a), unsafe.Sizeof(b))
+
+	s1 := []int{1, 3, 5, 7}
+	s1 = append(s1[0:2], s1[3:]...)
+	fmt.Printf("s1:%v\n", s1)
 }
