@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"reflect"
 	"testing"
 )
 
@@ -31,45 +30,37 @@ type ListStack struct {
 	data *ListGeneralNode
 }
 
-func (s *ArrStack) Init(input interface{}, arrcap int) bool {
-	log.Printf("type:%v\n", reflect.TypeOf(input).String())
-	elements, ok := input.([]byte)
-	if !ok {
-		log.Printf("init stack type error, input:%+v!\n", input)
-		return false
-	}
-	if arrcap == 0 {
-		arrcap = len(elements)
-	}
-	s.data = make([]interface{}, 0, arrcap)
-	if len(elements) > arrcap {
-		log.Printf("init stack error[input len:%d, cap:%d]!\n", len(elements), arrcap)
-		return false
+func (s *ArrStack) Init(input []interface{}, stacksize int) bool {
+	if stacksize == 0 {
+		stacksize = len(input)
 	}
 
-	s.cap = arrcap
-	for _, v := range elements {
+	if len(input) == 0 || len(input) > stacksize {
+		log.Fatalf("error! len:%d, in size:%d", len(input), stacksize)
+		return false
+	}
+	s.cap = stacksize
+	s.data = make([]interface{}, 0, stacksize)
+	for _, v := range input {
 		s.data = append(s.data, v)
+		s.top = s.count
 		s.count++
 	}
 
 	return true
 }
 
-func (s *ArrStack) PrintWithMark(mark string) {
-	log.Printf("\n%s, stack: %+v\n", mark, s.data)
-}
-func (s *ArrStack) Print() {
-	log.Printf("\nstack: %+v\n", s.data)
+func (s *ArrStack) Print(mark string) {
+	log.Printf("%s, stack: %+v\n", mark, s.data)
 }
 
 func (s *ArrStack) Push(element interface{}) bool {
 	// 栈满
 	if s.count >= s.cap {
-		log.Printf("stack full[cap:%d], push error!", s.cap)
+		log.Fatalf("stack full[cap:%d], push error!", s.cap)
 		return false
 	}
-	s.data[s.count] = element
+	s.data = append(s.data, element)
 	// 栈顶更新
 	s.top = s.count
 	s.count++
@@ -79,7 +70,7 @@ func (s *ArrStack) Push(element interface{}) bool {
 func (s *ArrStack) Pop() interface{} {
 	// 栈为空
 	if s.count == 0 {
-		log.Printf("stack empty, pop error!")
+		log.Fatalf("stack empty, pop error!")
 		return nil
 	}
 	// 将slice的最后一个元素删除
@@ -93,14 +84,14 @@ func (s *ArrStack) Pop() interface{} {
 func TestArrStackOperate(t *testing.T) {
 	s := &ArrStack{}
 	s.Init([]interface{}{1, 2, 3}, 10)
-	s.PrintWithMark("init")
+	s.Print("init")
 
 	if s.Push(888) {
-		s.PrintWithMark("after push")
+		s.Print("after push")
 	}
 
 	log.Printf("pop:%v\n", s.Pop())
-	s.PrintWithMark("after pop")
+	s.Print("after pop")
 
 }
 
@@ -119,15 +110,15 @@ func TestArrStackOperate(t *testing.T) {
 */
 func TestRemoveOuterParentheses(t *testing.T) {
 	s := &ArrStack{}
-	s.Init([]byte("(()())(())"), 100)
-	s.PrintWithMark("init")
+	s.Init([]interface{}{
+		"(", "(", ")", "(", ")", ")", "(", "(", ")", ")",
+	}, 100)
+	s.Print("init")
 
-	if s.Push(888) {
-		s.PrintWithMark("after push")
-	}
+	s.Push("asd")
 
 	log.Printf("pop:%v\n", s.Pop())
-	s.PrintWithMark("after pop")
+	s.Print("after pop")
 
 }
 func removeOuterParentheses(S string) string {
