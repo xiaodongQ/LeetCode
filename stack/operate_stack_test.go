@@ -109,18 +109,29 @@ func TestArrStackOperate(t *testing.T) {
 * [1021. 删除最外层的括号](https://leetcode-cn.com/problems/remove-outermost-parentheses/)
 */
 func TestRemoveOuterParentheses(t *testing.T) {
-	s := &ArrStack{}
-	s.Init([]interface{}{
-		"(", "(", ")", "(", ")", ")", "(", "(", ")", ")",
-	}, 100)
-	s.Print("init")
-
-	s.Push("asd")
-
-	log.Printf("pop:%v\n", s.Pop())
-	s.Print("after pop")
-
+	log.Printf("res:%s\n", removeOuterParentheses("(()())(())"))
 }
 func removeOuterParentheses(S string) string {
-	return ""
+	res := ""
+	num := 0
+	start, end := 0, 0
+	flag := false
+	for k, v := range S {
+		if string(v) == "(" {
+			num++
+			if !flag {
+				start = k
+				flag = true
+			}
+		} else {
+			num--
+			if num == 0 {
+				end = k
+				flag = false
+				res += S[start+1 : end]
+				start = end
+			}
+		}
+	}
+	return res
 }
