@@ -107,16 +107,14 @@ func TestArrStackOperate(t *testing.T) {
 	S[i] 为 "(" 或 ")"
 	S 是一个有效括号字符串
 * [1021. 删除最外层的括号](https://leetcode-cn.com/problems/remove-outermost-parentheses/)
+
+* 执行用时 :0 ms, 在所有 Go 提交中击败了100.00%的用户
+* 内存消耗 :6.2 MB, 在所有 Go 提交中击败了50.00%的用户
+* 时间O(n)，空间O(1)
 */
 func TestRemoveOuterParentheses(t *testing.T) {
 	log.Printf("req:%s, res:%s\n", "(()())(())", removeOuterParentheses("(()())(())"))
 }
-
-/*
-* 执行用时 :0 ms, 在所有 Go 提交中击败了100.00%的用户
-* 内存消耗 :6.2 MB, 在所有 Go 提交中击败了50.00%的用户
-* 时间O(n)，空间O(1)
- */
 func removeOuterParentheses(S string) string {
 	var res string
 	// 截取位置
@@ -143,4 +141,16 @@ func removeOuterParentheses(S string) string {
 		}
 	}
 	return res
+}
+
+/*
+* 给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
+* 在 S 上反复执行重复项删除操作，直到无法继续删除。
+* 在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。
+* [1047. 删除字符串中的所有相邻重复项](https://leetcode-cn.com/problems/remove-all-adjacent-duplicates-in-string/)
+
+*
+ */
+func removeDuplicates(S string) string {
+
 }
