@@ -109,27 +109,36 @@ func TestArrStackOperate(t *testing.T) {
 * [1021. 删除最外层的括号](https://leetcode-cn.com/problems/remove-outermost-parentheses/)
 */
 func TestRemoveOuterParentheses(t *testing.T) {
-	log.Printf("res:%s\n", removeOuterParentheses("(()())(())"))
+	log.Printf("req:%s, res:%s\n", "(()())(())", removeOuterParentheses("(()())(())"))
 }
+
+/*
+* 执行用时 :0 ms, 在所有 Go 提交中击败了100.00%的用户
+* 内存消耗 :6.2 MB, 在所有 Go 提交中击败了50.00%的用户
+* 时间O(n)，空间O(1)
+ */
 func removeOuterParentheses(S string) string {
-	res := ""
-	num := 0
+	var res string
+	// 截取位置
 	start, end := 0, 0
+	// 模拟栈中"("的个数
+	num := 0
+	// 是否开始下一段
 	flag := false
+
 	for k, v := range S {
-		if string(v) == "(" {
+		if v == '(' {
 			num++
 			if !flag {
 				start = k
 				flag = true
 			}
-		} else {
+		} else if v == ')' {
 			num--
 			if num == 0 {
 				end = k
-				flag = false
 				res += S[start+1 : end]
-				start = end
+				flag = false
 			}
 		}
 	}
