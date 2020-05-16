@@ -148,9 +148,32 @@ func removeOuterParentheses(S string) string {
 * 在 S 上反复执行重复项删除操作，直到无法继续删除。
 * 在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。
 * [1047. 删除字符串中的所有相邻重复项](https://leetcode-cn.com/problems/remove-all-adjacent-duplicates-in-string/)
-
 *
+* 依次入栈，碰到相同的字符则出栈
+* 执行用时 :4 ms, 在所有 Go 提交中击败了92.25%的用户
+* 内存消耗 :6.2 MB, 在所有 Go 提交中击败了25.00%的用户
+* 时间O(N)，空间O(N)
  */
+func TestRemoveDuplicates(t *testing.T) {
+	log.Printf("req:%s, res:%s\n", "abbaca", removeDuplicates("abbaca"))
+}
 func removeDuplicates(S string) string {
+	res := make([]rune, 0)
+	var top rune
 
+	for _, v := range S {
+
+		if v == top {
+			res = res[:len(res)-1]
+			if len(res) != 0 {
+				top = res[len(res)-1]
+			} else {
+				top = 0
+			}
+		} else {
+			res = append(res, v)
+			top = v
+		}
+	}
+	return string(res)
 }
