@@ -12,6 +12,7 @@ func TestBubbleSort(t *testing.T) {
 	log.Printf("init data:%v", data)
 	num := 0
 
+	// 每次冒泡把最大的元素存到最后
 	for i := 0; i < len(data); i++ {
 		// 注意此处的终止条件，并不需要len(data)-1，而是再-i，每次冒泡后，后面的冒泡次数的数不需再判断
 		for j := 0; j < len(data)-1-i; j++ {
@@ -57,4 +58,58 @@ func TestBubbleSortOptimize(t *testing.T) {
 		}
 	}
 	log.Printf("sort data:%v, num:%d", data, num)
+}
+
+// 插入排序
+func TestInsertSort(t *testing.T) {
+	data := [...]int{3, 5, 4, 1, 2, 6}
+	log.Printf("init data:%v", data)
+
+	if len(data) <= 1 {
+		return
+	}
+
+	for i := 1; i < len(data); i++ {
+		// 从未排序区取的数据
+		value := data[i]
+		j := i - 1
+
+		// 从已排序序区的最后开始比较
+		for ; j >= 0; j-- {
+			if data[j] > value {
+				// 已排序区数据比要插入的数据大则进行后移
+				data[j+1] = data[j]
+			} else {
+				// 小于要插入的数据，则退出循环，并将数据插入到这个数据后面
+				break
+			}
+		}
+		data[j+1] = value
+	}
+	log.Printf("sort data:%v", data)
+}
+
+// 选择排序
+func TestSelectionSort(t *testing.T) {
+	data := [...]int{3, 5, 4, 1, 2, 6}
+	log.Printf("init data:%v", data)
+
+	if len(data) <= 1 {
+		return
+	}
+
+	for i := 0; i < len(data); i++ {
+		// 从未排序区找最小的元素
+		minIndex := i
+		for j := i; j < len(data); j++ {
+			if data[j] < data[minIndex] {
+				minIndex = j
+			}
+		}
+		if i != minIndex {
+			// 交换位置
+			data[i], data[minIndex] = data[minIndex], data[i]
+		}
+	}
+	log.Printf("sort data:%v", data)
 }
