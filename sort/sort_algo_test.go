@@ -113,3 +113,47 @@ func TestSelectionSort(t *testing.T) {
 	}
 	log.Printf("sort data:%v", data)
 }
+
+// 归并排序
+func TestMergeSort(t *testing.T) {
+	data := []int{3, 5, 4, 1, 2, 6}
+	log.Printf("init data:%v", data)
+	MergeSort(&data, 0, len(data))
+	log.Printf("sort data:%v", data)
+}
+func MergeSort(data *[]int, p, r int) {
+	if p >= r {
+		return
+	}
+	q := (p + r) / 2
+	MergeSort(data, p, q)
+	MergeSort(data, q+1, r)
+
+	// 将p,间的数据合并
+	i := p
+	j := q + 1
+	k := 0
+	tmpdata := make([]int, len(*data))
+	for i < q && j < r {
+		if (*data)[i] < (*data)[j] {
+			tmpdata[k] = (*data)[i]
+		} else {
+			tmpdata[k] = (*data)[j]
+		}
+		i++
+		j++
+		k++
+	}
+	// 假设[p,q]有剩余
+	start, end := i, q
+	if j <= r {
+		// [q+1,r]剩余
+		start, end = j, r
+	}
+	for start < end {
+		tmpdata[k] = (*data)[start]
+		k++
+		start++
+	}
+	*data = tmpdata
+}
