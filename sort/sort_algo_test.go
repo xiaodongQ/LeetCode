@@ -122,6 +122,8 @@ func TestMergeSort(t *testing.T) {
 	log.Printf("sort data:%v", data)
 }
 func MergeSort(data *[]int, p, r int) {
+	log.Printf("data:%v\n", *data)
+
 	if p >= r {
 		return
 	}
@@ -129,7 +131,7 @@ func MergeSort(data *[]int, p, r int) {
 	MergeSort(data, p, q)
 	MergeSort(data, q+1, r)
 
-	// 将p,间的数据合并
+	// 将p,r间的数据合并
 	i := p
 	j := q + 1
 	k := 0
@@ -144,8 +146,9 @@ func MergeSort(data *[]int, p, r int) {
 		j++
 		k++
 	}
-	// 假设[p,q]有剩余
+	// 先假设[p,q]有剩余
 	start, end := i, q
+	// 若后一部分没到最后，则说明[q+1,r]有剩余
 	if j <= r {
 		// [q+1,r]剩余
 		start, end = j, r
