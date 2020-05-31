@@ -127,6 +127,7 @@ func MergeSort(data []int, p, r int) {
 	if p >= r {
 		return
 	}
+	// 两部分数据，等分
 	q := (p + r) / 2
 	MergeSort(data, p, q)
 	MergeSort(data, q+1, r)
@@ -222,4 +223,61 @@ func merge2(left, right []int) []int {
 	}
 
 	return res
+}
+
+// 快速排序
+func TestQuickSort(t *testing.T) {
+	data := []int{3, 5, 4, 1, 2, 6}
+	log.Printf("init data:%v", data)
+	QuickSort(data, 0, len(data)-1)
+	log.Printf("sort data:%v", data)
+}
+func QuickSort(data []int, p, r int) {
+	if p >= r {
+		return
+	}
+	// 分区函数，返回分区点(分为三部分，小于分区点、分区点、大于分区点)
+	q := partition(data, p, r)
+	QuickSort(data, p, q-1)
+	QuickSort(data, q+1, r)
+}
+
+// 分区函数，随机选一个元素所谓pivot，一般取[p,r]区间最后一个元素
+func partition(data []int, p, r int) int {
+	i := p
+	pivot := data[r]
+	for j := p; j < r; j++ {
+		if data[j] < pivot {
+			data[i], data[j] = data[j], data[i]
+			i++
+		}
+	}
+	data[i], data[r] = data[r], data[i]
+	return i
+}
+
+// 根据快排思想在O(n)内求第K大的数
+func TestFindKTop(t *testing.T) {
+	k := 1
+	data := []int{4, 2, 5, 12, 3}
+	log.Printf("init data:%v", data)
+
+	// 分区
+	log.Printf("find k top:%v", FindKTop(data, 0, len(data)-1, k))
+
+}
+func FindKTop(data []int, p, r, k int) int {
+	// 没有满足的数据
+	if k > r+1 || p > r {
+		return -1
+	}
+	log.Printf("p:%d, r:%d", p, r)
+	q := partition(data, p, r)
+	if k == q+1 {
+		return data[q]
+	} else if k < q+1 {
+		return FindKTop(data, p, q-1, k)
+	} else {
+		return FindKTop(data, q+1, r, k)
+	}
 }
