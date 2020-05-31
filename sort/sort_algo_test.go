@@ -118,14 +118,12 @@ func TestSelectionSort(t *testing.T) {
 func TestMergeSort(t *testing.T) {
 	data := []int{3, 5, 4, 1, 2, 6}
 	log.Printf("init data:%v", data)
-	MergeSort(data, 0, len(data))
+	MergeSort(data, 0, len(data)-1)
 	log.Printf("sort data:%v", data)
 
 	// log.Printf("sort2 data:%v", MergeSort2(data))
 }
 func MergeSort(data []int, p, r int) {
-	log.Printf("p:%d, r:%d, data:%v\n", p, r, data)
-
 	if p >= r {
 		return
 	}
@@ -134,13 +132,13 @@ func MergeSort(data []int, p, r int) {
 	MergeSort(data, q+1, r)
 
 	// 将p,r间的数据合并
-	merge(data, p, q, r)
+	merge1(data, p, q, r)
 }
 func merge(data []int, p, q, r int) {
 	i := p
 	j := q + 1
 	var tmpdata []int
-	for i < q && j < r {
+	for i <= q && j <= r {
 		if data[i] <= data[j] {
 			tmpdata = append(tmpdata, data[i])
 			i++
@@ -149,10 +147,10 @@ func merge(data []int, p, q, r int) {
 			j++
 		}
 	}
-	if i < q {
+	if i <= q {
 		tmpdata = append(tmpdata, data[i:q+1]...)
 	}
-	if j < r {
+	if j <= r {
 		tmpdata = append(tmpdata, data[j:r]...)
 	}
 
@@ -166,7 +164,7 @@ func merge1(data []int, p, q, r int) {
 	j := q + 1
 	k := 0
 	tmpdata := make([]int, r-p+1)
-	for i < q && j < r {
+	for i <= q && j <= r {
 		if data[i] <= data[j] {
 			tmpdata[k] = data[i]
 			i++
@@ -179,17 +177,17 @@ func merge1(data []int, p, q, r int) {
 	// 先假设[p,q]有剩余
 	start, end := i, q
 	// 若后一部分没到最后，则说明[q+1,r]有剩余
-	if j < r {
+	if j <= r {
 		// [q+1,r]剩余
 		start, end = j, r
 	}
-	for start < end {
+	for start <= end {
 		tmpdata[k] = data[start]
 		k++
 		start++
 	}
 	// 数据拷贝回data里
-	for t := 0; t < r-p; t++ {
+	for t := 0; t <= r-p; t++ {
 		data[p+t] = tmpdata[t]
 	}
 }
