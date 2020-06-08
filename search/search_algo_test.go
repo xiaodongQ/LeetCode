@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-06-07 22:26:06
- * @LastEditTime: 2020-06-08 08:46:25
+ * @LastEditTime: 2020-06-08 09:01:06
  * @LastEditors: xd
  * @Note:
  */
@@ -23,7 +23,7 @@ func TestBsearch(t *testing.T) {
 	log.Printf("search first member, find %d, index:%d\n", value, bsearchFirst(data, value))
 }
 
-// 循环实现
+// 二分查找 循环实现
 func bsearch(data []int, value int) int {
 	if len(data) == 0 {
 		return -1
@@ -46,7 +46,7 @@ func bsearch(data []int, value int) int {
 	return -1
 }
 
-// 递归实现
+// 二分查找 递归实现
 func bsearch2(data []int, value int) int {
 	return bsearchRecusive(data, 0, len(data)-1, value)
 }
@@ -64,7 +64,7 @@ func bsearchRecusive(data []int, low, high, value int) int {
 	}
 }
 
-// 查找第一个等于指定值的元素
+// 二分查找 查找第一个等于指定值的元素
 func bsearchFirst(data []int, value int) int {
 	if len(data) == 0 {
 		return -1
@@ -87,7 +87,7 @@ func bsearchFirst(data []int, value int) int {
 	return -1
 }
 
-// 实现2
+// 二分查找 查找第一个等于指定值的元素 实现2
 func bsearchFirst2(data []int, value int) int {
 	if len(data) == 0 {
 		return -1
