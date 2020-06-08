@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-06-07 22:26:06
- * @LastEditTime: 2020-06-07 22:44:45
+ * @LastEditTime: 2020-06-08 08:46:25
  * @LastEditors: xd
  * @Note:
  */
@@ -14,11 +14,13 @@ import (
 )
 
 func TestBsearch(t *testing.T) {
-	data := []int{1, 2, 3, 6, 7}
+	data := []int{1, 2, 3, 4, 4, 4, 5, 6, 6, 7}
 	log.Printf("data:%v", data)
-	value := 6
+	value := 4
 	log.Printf("loop find %d, index:%d\n", value, bsearch(data, value))
 	log.Printf("recursive find %d, index:%d\n", value, bsearch2(data, value))
+
+	log.Printf("search first member, find %d, index:%d\n", value, bsearchFirst(data, value))
 }
 
 // 循环实现
@@ -60,4 +62,50 @@ func bsearchRecusive(data []int, low, high, value int) int {
 	} else {
 		return bsearchRecusive(data, mid+1, high, value)
 	}
+}
+
+// 查找第一个等于指定值的元素
+func bsearchFirst(data []int, value int) int {
+	if len(data) == 0 {
+		return -1
+	}
+	low := 0
+	high := len(data) - 1
+	for low <= high {
+		mid := low + ((high - low) >> 1)
+		if value == data[mid] {
+			if mid == 0 || data[mid-1] != value {
+				return mid
+			}
+			high = mid - 1
+		} else if value < data[mid] {
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
+	}
+	return -1
+}
+
+// 实现2
+func bsearchFirst2(data []int, value int) int {
+	if len(data) == 0 {
+		return -1
+	}
+	low := 0
+	high := len(data) - 1
+	for low <= high {
+		mid := low + ((high - low) >> 1)
+		if value <= data[mid] {
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
+
+		// 低位找到相等元素则返回
+		if low < len(data) && data[low] == value {
+			return low
+		}
+	}
+	return -1
 }
