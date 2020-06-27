@@ -2,11 +2,11 @@
  * @Description:
  * @Author: xd
  * @Date: 2020-04-25 23:28:10
- * @LastEditTime: 2020-05-17 00:15:19
+ * @LastEditTime: 2020-06-27 10:12:04
  * @LastEditors: xd
  * @Note:
  */
-package main
+package stack
 
 /*
  * 实现一个MyQueue类，该类用两个栈来实现一个队列

@@ -1,11 +1,12 @@
-package main
+package stack
 
 import (
 	"fmt"
+	"testing"
 	"unsafe"
 )
 
-func main() {
+func TestMain(t *testing.T) {
 	fmt.Println("vim-go")
 	e := []int32{1, 2, 3}
 	fmt.Println("cap of e before:", cap(e))
