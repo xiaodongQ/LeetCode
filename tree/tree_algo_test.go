@@ -48,6 +48,13 @@ func initTree() {
 	*/
 }
 
+func initRootTree() {
+	// 清空节点
+	globalTree = &BinaryTreeNode{}
+	// 只有一个节点
+	globalTree.value = 9
+}
+
 // 遍历二叉树
 func TestTreeTraverse(t *testing.T) {
 	initTree()
@@ -97,6 +104,10 @@ func postOrder(root *BinaryTreeNode) {
 
 // 层序遍历(借助slice模拟队列)
 func levelOrder(root *BinaryTreeNode) {
+	if root == nil {
+		return
+	}
+
 	var s1 []*BinaryTreeNode
 
 	s1 = append(s1, root)
@@ -168,6 +179,7 @@ func Find(root *BinaryTreeNode, value int) *BinaryTreeNode {
 	return nil
 }
 
+// 插入
 func TestInsert(t *testing.T) {
 	/*
 			9
@@ -179,7 +191,7 @@ func TestInsert(t *testing.T) {
 	fmt.Println(" levelOrder")
 
 	InsertRec(globalTree, 5)
-	levelOrder(globalTree) // 9 6 15 0 8
+	levelOrder(globalTree) // 9 6 15 0 8 5
 	fmt.Println(" levelOrder")
 }
 
@@ -221,4 +233,78 @@ func InsertRec(root *BinaryTreeNode, v int) {
 		return
 	}
 	InsertRec(root.right, v)
+}
+
+func TestDelete(t *testing.T) {
+	/*
+			9
+		  6   15
+		 0 8
+		  7
+	*/
+	initTree()
+	Insert(globalTree, 7)
+	// initRootTree()
+	levelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" levelOrder")
+
+	Delete(&globalTree, 9)
+	levelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" levelOrder")
+}
+func Delete(root **BinaryTreeNode, v int) {
+	var father *BinaryTreeNode
+	node := *root
+	for node != nil && v != node.value {
+		father = node
+		if v < node.value {
+			node = node.left
+		} else {
+			node = node.right
+		}
+	}
+	if node == nil {
+		// 没有找到
+		return
+	}
+
+	// 找到了值为v的节点，分情况处理
+	// 要删除的节点有两个子节点
+	if node.left != nil && node.right != nil {
+		// 找到右子树中最小的节点，替换到要删除的节点上，再删除这个最小节点
+		minNode := node.right
+		minFather := node
+		for minNode.left != nil {
+			minFather = minNode
+			minNode = minNode.left
+		}
+		// 替换
+		// 要删除的节点值 替换为 右子树中最小节点值。到此处就已经完成了两个节点时特有操作，剩下的就和其他情形一样了
+		node.value = minNode.value
+		// 最小节点取代要删除的节点(父节点同时改变指向)，此时原最小节点还没有被删除，后面操作就操作最小节点了
+		// 此处赋值只是辅助后面将最小节点从原位置清理掉，让各种情况保持一份逻辑
+		node = minNode
+		father = minFather
+	}
+
+	// 要删除的节点是叶子节点，或其仅有一个子节点(两个节点的情形已经变成了没有子节点)
+	var child *BinaryTreeNode
+	if node.left != nil {
+		child = node.left
+	} else if node.right != nil {
+		child = node.right
+	} else {
+		child = nil
+	}
+	// 下面操作是为了删除节点(通过让父节点指向要删除节点的子节点)
+	if father == nil {
+		// 若删除的是根节点，将其子节点链接到root上(此处需要传入的是节点的指针)
+		// 对于上面两个节点的情形，father也改变成了最小节点的father，并不是nil，不会进入该语句块
+		*root = child
+	} else if father.left == node {
+		// 若要删除的节点是父节点的左子树，则将节点的子节点进行替换
+		father.left = child
+	} else {
+		father.right = child
+	}
 }
