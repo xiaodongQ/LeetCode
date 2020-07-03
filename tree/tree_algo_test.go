@@ -6,11 +6,7 @@ import (
 	"testing"
 )
 
-type BinaryTreeNode struct {
-	value int
-	left  *BinaryTreeNode
-	right *BinaryTreeNode
-}
+type BinaryTreeNode = TreeNode
 
 var globalTree *BinaryTreeNode
 
@@ -20,26 +16,26 @@ func initTree() {
 	// 定义几个节点
 	// 第2层(根节点为第一层)
 	node1 := BinaryTreeNode{
-		value: 6,
+		Val: 6,
 	}
 	node2 := BinaryTreeNode{
-		value: 15,
+		Val: 15,
 	}
 
 	// 第3层
 	node3 := BinaryTreeNode{
-		value: 0,
+		Val: 0,
 	}
 	node4 := BinaryTreeNode{
-		value: 8,
+		Val: 8,
 	}
 	// 构造一个完全二叉树(叶子节点都在最底下两层，最后一层的叶子节点都靠左，且除最后一层，其他层节点达到最大)
-	globalTree.value = 9
-	globalTree.left = &node1
-	globalTree.right = &node2
+	globalTree.Val = 9
+	globalTree.Left = &node1
+	globalTree.Right = &node2
 	// root的左子树的左右节点
-	node1.left = &node3
-	node1.right = &node4
+	node1.Left = &node3
+	node1.Right = &node4
 	/*
 		树结构如(同时也是二叉查找树，任意节点左子树中每个节点的值都小于这个值，右子树中节点值都大于这个值)：
 				 9
@@ -52,58 +48,58 @@ func initRootTree() {
 	// 清空节点
 	globalTree = &BinaryTreeNode{}
 	// 只有一个节点
-	globalTree.value = 9
+	globalTree.Val = 9
 }
 
 // 遍历二叉树
 func TestTreeTraverse(t *testing.T) {
 	initTree()
-	preOrder(globalTree) // 9 6 0 8 15
-	fmt.Println(" preOrder")
+	PreOrder(globalTree) // 9 6 0 8 15
+	fmt.Println(" PreOrder")
 
-	inOrder(globalTree) // 0 6 8 9 15
-	fmt.Println(" inOrder")
+	InOrder(globalTree) // 0 6 8 9 15
+	fmt.Println(" InOrder")
 
-	postOrder(globalTree) // 0 8 6 15 9
-	fmt.Println(" postOrder")
+	PostOrder(globalTree) // 0 8 6 15 9
+	fmt.Println(" PostOrder")
 
-	levelOrder(globalTree) // 9 6 15 0 8
-	fmt.Println(" levelOrder")
+	LevelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" LevelOrder")
 }
 
 // 前序遍历
-func preOrder(root *BinaryTreeNode) {
+func PreOrder(root *BinaryTreeNode) {
 	if root == nil {
 		return
 	}
 	// log.Printf打印默认会格式化每行后换行，此处打印到一行里，最后打印一次换行刷新缓存区
-	fmt.Printf("%d ", root.value)
-	preOrder(root.left)
-	preOrder(root.right)
+	fmt.Printf("%d ", root.Val)
+	PreOrder(root.Left)
+	PreOrder(root.Right)
 }
 
 // 中序遍历
-func inOrder(root *BinaryTreeNode) {
+func InOrder(root *BinaryTreeNode) {
 	if root == nil {
 		return
 	}
-	inOrder(root.left)
-	fmt.Printf("%d ", root.value)
-	inOrder(root.right)
+	InOrder(root.Left)
+	fmt.Printf("%d ", root.Val)
+	InOrder(root.Right)
 }
 
 // 后序遍历
-func postOrder(root *BinaryTreeNode) {
+func PostOrder(root *BinaryTreeNode) {
 	if root == nil {
 		return
 	}
-	postOrder(root.left)
-	postOrder(root.right)
-	fmt.Printf("%d ", root.value)
+	PostOrder(root.Left)
+	PostOrder(root.Right)
+	fmt.Printf("%d ", root.Val)
 }
 
 // 层序遍历(借助slice模拟队列)
-func levelOrder(root *BinaryTreeNode) {
+func LevelOrder(root *BinaryTreeNode) {
 	if root == nil {
 		return
 	}
@@ -112,12 +108,12 @@ func levelOrder(root *BinaryTreeNode) {
 
 	s1 = append(s1, root)
 	for len(s1) != 0 {
-		fmt.Printf("%d ", s1[0].value)
-		if s1[0].left != nil {
-			s1 = append(s1, s1[0].left)
+		fmt.Printf("%d ", s1[0].Val)
+		if s1[0].Left != nil {
+			s1 = append(s1, s1[0].Left)
 		}
-		if s1[0].right != nil {
-			s1 = append(s1, s1[0].right)
+		if s1[0].Right != nil {
+			s1 = append(s1, s1[0].Right)
 		}
 		// 从队列取出一个节点(模拟队列的FIFO)
 		s1 = s1[1:]
@@ -137,41 +133,41 @@ func TestFind(t *testing.T) {
 	if node == nil {
 		log.Printf("not find")
 	} else {
-		log.Printf("find node:%p, value:%d", node, node.value)
+		log.Printf("find node:%p, Val:%d", node, node.Val)
 	}
 
 	node = FindRec(globalTree, v)
 	if node == nil {
 		log.Printf("not find")
 	} else {
-		log.Printf("find node:%p, value:%d", node, node.value)
+		log.Printf("find node:%p, Val:%d", node, node.Val)
 	}
 }
 
 // 递归方式
-func FindRec(root *BinaryTreeNode, value int) *BinaryTreeNode {
+func FindRec(root *BinaryTreeNode, Val int) *BinaryTreeNode {
 	if root == nil {
 		return nil
 	}
-	if value < root.value {
-		return Find(root.left, value)
-	} else if value > root.value {
-		return Find(root.right, value)
+	if Val < root.Val {
+		return Find(root.Left, Val)
+	} else if Val > root.Val {
+		return Find(root.Right, Val)
 	}
 	return root
 }
 
 // 循环方式(递推)
-func Find(root *BinaryTreeNode, value int) *BinaryTreeNode {
+func Find(root *BinaryTreeNode, Val int) *BinaryTreeNode {
 	if root == nil {
 		return nil
 	}
 	node := root
 	for node != nil {
-		if value < node.value {
-			node = node.left
-		} else if value > node.value {
-			node = node.right
+		if Val < node.Val {
+			node = node.Left
+		} else if Val > node.Val {
+			node = node.Right
 		} else {
 			return node
 		}
@@ -187,31 +183,31 @@ func TestInsert(t *testing.T) {
 		 0 8
 	*/
 	initTree()
-	levelOrder(globalTree) // 9 6 15 0 8
-	fmt.Println(" levelOrder")
+	LevelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" LevelOrder")
 
 	InsertRec(globalTree, 5)
-	levelOrder(globalTree) // 9 6 15 0 8 5
-	fmt.Println(" levelOrder")
+	LevelOrder(globalTree) // 9 6 15 0 8 5
+	fmt.Println(" LevelOrder")
 }
 
 // 不考虑元素相同
 func Insert(root *BinaryTreeNode, v int) {
 	node := root
 	for node != nil {
-		if v < node.value {
+		if v < node.Val {
 			// 若要插入的元素比节点值小，其左子树为空时则直接插入，不为空则进入下一次递归
-			if node.left == nil {
-				node.left = &BinaryTreeNode{value: v}
+			if node.Left == nil {
+				node.Left = &BinaryTreeNode{Val: v}
 				return
 			}
-			node = node.left
+			node = node.Left
 		} else {
-			if node.right == nil {
-				node.right = &BinaryTreeNode{value: v}
+			if node.Right == nil {
+				node.Right = &BinaryTreeNode{Val: v}
 				return
 			}
-			node = node.right
+			node = node.Right
 		}
 	}
 }
@@ -219,20 +215,20 @@ func InsertRec(root *BinaryTreeNode, v int) {
 	if root == nil {
 		return
 	}
-	if v < root.value {
-		if root.left == nil {
-			root.left = &BinaryTreeNode{value: v}
+	if v < root.Val {
+		if root.Left == nil {
+			root.Left = &BinaryTreeNode{Val: v}
 			return
 		}
-		InsertRec(root.left, v)
+		InsertRec(root.Left, v)
 		return
 	}
 
-	if root.right == nil {
-		root.right = &BinaryTreeNode{value: v}
+	if root.Right == nil {
+		root.Right = &BinaryTreeNode{Val: v}
 		return
 	}
-	InsertRec(root.right, v)
+	InsertRec(root.Right, v)
 }
 
 func TestDelete(t *testing.T) {
@@ -245,22 +241,22 @@ func TestDelete(t *testing.T) {
 	initTree()
 	Insert(globalTree, 7)
 	// initRootTree()
-	levelOrder(globalTree) // 9 6 15 0 8
-	fmt.Println(" levelOrder")
+	LevelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" LevelOrder")
 
 	Delete(&globalTree, 9)
-	levelOrder(globalTree) // 9 6 15 0 8
-	fmt.Println(" levelOrder")
+	LevelOrder(globalTree) // 9 6 15 0 8
+	fmt.Println(" LevelOrder")
 }
 func Delete(root **BinaryTreeNode, v int) {
 	var father *BinaryTreeNode
 	node := *root
-	for node != nil && v != node.value {
+	for node != nil && v != node.Val {
 		father = node
-		if v < node.value {
-			node = node.left
+		if v < node.Val {
+			node = node.Left
 		} else {
-			node = node.right
+			node = node.Right
 		}
 	}
 	if node == nil {
@@ -270,17 +266,17 @@ func Delete(root **BinaryTreeNode, v int) {
 
 	// 找到了值为v的节点，分情况处理
 	// 要删除的节点有两个子节点
-	if node.left != nil && node.right != nil {
+	if node.Left != nil && node.Right != nil {
 		// 找到右子树中最小的节点，替换到要删除的节点上，再删除这个最小节点
-		minNode := node.right
+		minNode := node.Right
 		minFather := node
-		for minNode.left != nil {
+		for minNode.Left != nil {
 			minFather = minNode
-			minNode = minNode.left
+			minNode = minNode.Left
 		}
 		// 替换
 		// 要删除的节点值 替换为 右子树中最小节点值。到此处就已经完成了两个节点时特有操作，剩下的就和其他情形一样了
-		node.value = minNode.value
+		node.Val = minNode.Val
 		// 最小节点取代要删除的节点(父节点同时改变指向)，此时原最小节点还没有被删除，后面操作就操作最小节点了
 		// 此处赋值只是辅助后面将最小节点从原位置清理掉，让各种情况保持一份逻辑
 		node = minNode
@@ -289,10 +285,10 @@ func Delete(root **BinaryTreeNode, v int) {
 
 	// 要删除的节点是叶子节点，或其仅有一个子节点(两个节点的情形已经变成了没有子节点)
 	var child *BinaryTreeNode
-	if node.left != nil {
-		child = node.left
-	} else if node.right != nil {
-		child = node.right
+	if node.Left != nil {
+		child = node.Left
+	} else if node.Right != nil {
+		child = node.Right
 	} else {
 		child = nil
 	}
@@ -301,10 +297,10 @@ func Delete(root **BinaryTreeNode, v int) {
 		// 若删除的是根节点，将其子节点链接到root上(此处需要传入的是节点的指针)
 		// 对于上面两个节点的情形，father也改变成了最小节点的father，并不是nil，不会进入该语句块
 		*root = child
-	} else if father.left == node {
+	} else if father.Left == node {
 		// 若要删除的节点是父节点的左子树，则将节点的子节点进行替换
-		father.left = child
+		father.Left = child
 	} else {
-		father.right = child
+		father.Right = child
 	}
 }
