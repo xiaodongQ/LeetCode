@@ -2,7 +2,7 @@
  * @Description:
  * @Author: xd
  * @Date: 2019-10-29 08:42:51
- * @LastEditTime: 2019-11-03 19:41:50
+ * @LastEditTime: 2020-07-03 08:14:49
  * @LastEditors: xd
  * @Note:
 	source: https://leetcode-cn.com/problems/two-sum/
@@ -19,7 +19,6 @@ package main
 
 import (
 	"fmt"
-	"net"
 )
 
 // 结果：执行用时:4 ms, golang中>97.39%; 内存消耗:3.7MB, golang中>46.28%
@@ -45,6 +44,4 @@ func main() {
 		fmt.Printf("index:%d, value:%d", v, nums[v])
 		return
 	}
-	_, err := net.ResolveTCPAddr("tcp", ":4040")
-	fmt.Println()
 }
