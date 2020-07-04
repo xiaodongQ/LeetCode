@@ -1,6 +1,8 @@
 package tree
 
-import "testing"
+import (
+	"testing"
+)
 
 type TreeNode struct {
 	Val   int
@@ -28,19 +30,85 @@ type TreeNode struct {
 */
 func TestSortedArrayToBST(t *testing.T) {
 	nums := []int{-10, -3, 0, 5, 9}
+	// nums := []int{}
 	LevelOrder(sortedArrayToBST(nums))
-}
-func sortedArrayToBST(nums []int) *TreeNode {
-	return doArraySort(nums, 0, len(nums)-1)
+	// LevelOrder(sortedArrayToBSTLoop(nums))
+
 }
 
+func sortedArrayToBST(nums []int) *TreeNode {
+	/* 递归方式
+	执行用时：4 ms, 在所有 Go 提交中击败了86.31%的用户
+	内存消耗：4.4 MB, 在所有 Go 提交中击败了28.57%的用户
+	*/
+	return doArraySort(nums, 0, len(nums)-1)
+}
 func doArraySort(nums []int, left, right int) *TreeNode {
 	if left > right {
 		return nil
 	}
-	mid := (left + right) / 2
+	// 不使用 (left+right)/2，有溢出风险
+	mid := left + ((right - left) >> 1)
 	root := &TreeNode{Val: nums[mid]}
 	root.Left = doArraySort(nums, left, mid-1)
 	root.Right = doArraySort(nums, mid+1, right)
+	return root
+}
+
+//执行用时：4 ms, 在所有 Go 提交中击败了86.31%的用户
+// 内存消耗：5.8 MB, 在所有 Go 提交中击败了28.57%的用户
+func sortedArrayToBSTLoop(nums []int) *TreeNode {
+	// 循环方式，利用两个队列，类似二叉树层序遍历的方式(BFS宽度优先搜索)
+	if len(nums) == 0 {
+		return nil
+	}
+	left := 0
+	right := len(nums) - 1
+	mid := left + (right-left)/2
+	root := &TreeNode{Val: nums[mid]}
+	if len(nums) == 1 {
+		return root
+	}
+
+	// 保存下次要处理的索引范围，分别对应左右子树
+	srange := make([][2]int, 0, 64)
+	srange = append(srange, [2]int{left, mid - 1})
+	srange = append(srange, [2]int{mid + 1, right})
+	// 记录父节点，记录两次，分别用于左、右子树的处理
+	// 和保存的范围个数是一一对应的
+	snode := make([]*TreeNode, 0, 64)
+	snode = append(snode, root)
+	snode = append(snode, root)
+	for len(srange) != 0 && len(snode) != 0 {
+		// 取出一次父节点，取出后就去掉一条记录，模拟队列
+		curnode := snode[0]
+		snode = snode[1:]
+
+		// 取出一个范围
+		left = srange[0][0]
+		right = srange[0][1]
+		srange = srange[1:]
+
+		// 注意不能像下面两种方式直接用 >>1 来替换/2，若left和right相等，则右移一位等于-1，会影响后面的判断并导致越界访问
+		// mid = ((right + left) >> 1)
+		// mid = left + ((right - left) >> 1)
+		mid = left + ((right - left) / 2) // 还是老实用/2吧
+		// 创建一个新节点
+		newnode := &TreeNode{Val: nums[mid]}
+		if newnode.Val < curnode.Val {
+			curnode.Left = newnode
+		} else {
+			curnode.Right = newnode
+		}
+
+		// 把新节点和范围加到队列中
+		if left < right {
+			srange = append(srange, [2]int{left, mid - 1})
+			srange = append(srange, [2]int{mid + 1, right})
+			snode = append(snode, newnode)
+			snode = append(snode, newnode)
+		}
+	}
+
 	return root
 }
