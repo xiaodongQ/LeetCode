@@ -57,6 +57,7 @@ func TestLengthOfLongestSubstring(t *testing.T) {
 	Your memory usage beats 67.74 % of golang submissions (2.8 MB)
 	时间O(n)，每个字符遍历一遍
 	空间O(m)，辅助map，m表示不同的字符个数(字符集大小，ASCII为0-128，可认为m最大128)
+		固定长度，所以为O(1)？
 */
 // func lengthOfLongestSubstring(s string) int {
 // 	// 记录每个字符出现的次数
