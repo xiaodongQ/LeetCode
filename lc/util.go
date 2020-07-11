@@ -1,15 +1,17 @@
+package lc
+
 /*
  * @Description:
  * @Author: xd
  * @Date: 2020-07-05 16:52:29
- * @LastEditTime: 2020-07-05 17:07:17
+ * @LastEditTime: 2020-07-11 09:21:06
  * @LastEditors: xd
  * @Note:
  */
-package lc
 
 import "log"
 
+// ListNode 链表节点
 type ListNode struct {
 	Val  int
 	Next *ListNode
