@@ -109,6 +109,7 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
 	p1 := m - 1
 	p2 := n - 1
 	p3 := m + n - 1
+	// 还是改成 &&，然后处理剩余的数组，效率高些。这个题目中是把数据插入到nums1，所以若nums1有剩余并不需要再操作，所以只要考虑nums2剩余的处理
 	for p1 >= 0 || p2 >= 0 {
 		if p1 >= 0 && p2 >= 0 {
 			if nums1[p1] >= nums2[p2] {
