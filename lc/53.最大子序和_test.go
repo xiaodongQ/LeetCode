@@ -35,7 +35,7 @@ package lc
 	暴力求解：两层循环，第一层依次移动，第二层在从一层的索引往后求和，保存最大
 */
 func maxSubArray(nums []int) int {
-
+	return 0
 }
 
 // @lc code=end
