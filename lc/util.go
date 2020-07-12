@@ -4,7 +4,7 @@ package lc
  * @Description:
  * @Author: xd
  * @Date: 2020-07-05 16:52:29
- * @LastEditTime: 2020-07-11 09:21:06
+ * @LastEditTime: 2020-07-12 22:51:55
  * @LastEditors: xd
  * @Note:
  */
@@ -15,6 +15,13 @@ import "log"
 type ListNode struct {
 	Val  int
 	Next *ListNode
+}
+
+// TreeNode 二叉树节点
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
 }
 
 // InitLinkInfo 构造一个链表
