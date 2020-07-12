@@ -39,7 +39,14 @@ package lc
 
 // @lc code=start
 /*
-	二分查找，r*r <= x，(r+1)*(r+1)>x
+	要求的整数满足最大的 k*k <= x，二分查找依次找满足条件的中间值
+	1017/1017 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 14.29 % of golang submissions (2.2 MB)
+	时间O(logx)，空间O(1)
+
+	牛顿迭代法，效率更高一些，但数学推导和横轴的交点，需要参考链接理解一下
+	要用的话可以先直接记迭代公式：x(i+1) = 1/2(x(i) + C/x(i))，C取值为x，直到x(i+1)和x(i)取值相差10^(-7)就当作结束
 */
 func mySqrt(x int) int {
 	res := -1
@@ -57,5 +64,34 @@ func mySqrt(x int) int {
 
 	return res
 }
+
+/*
+	牛顿迭代法借助泰勒级数，效率更高一些，但数学推导和横轴的交点，需要参考链接理解一下
+	要用的话可以先直接记迭代公式：x(i+1) = 1/2(x(i) + C/x(i))，C取值为x，直到x(i+1)和x(i)取值相差10^(-7)就当作结束
+	从大到小收敛
+
+	1017/1017 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 14.29 % of golang submissions (2.2 MB)
+	时间O(logn)，空间O(1)
+
+*/
+// func mySqrt(x int) int {
+// 	if x == 0 {
+// 		return 0
+// 	}
+// 	res := 0
+// 	cur := float64(0.0)
+// 	C, pre := float64(x), float64(x)
+// 	for {
+// 		cur = 0.5 * (pre + C/pre)
+// 		if math.Abs(pre-cur) < 1e-7 {
+// 			res = int(cur)
+// 			break
+// 		}
+// 		pre = cur
+// 	}
+// 	return res
+// }
 
 // @lc code=end
