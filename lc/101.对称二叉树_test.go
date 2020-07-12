@@ -64,8 +64,9 @@ package lc
 	Your memory usage beats 57.14 % of golang submissions (2.9 MB)
 	时间O(n)，
 	空间复杂度和递归次数有关(深度优先DFS)：
-		完全平衡二叉树时最优，层数为O(logn)；空间复杂度O(logn)？
-		每个节点都要递归一次，O(n)，和层数无关(不大确定，应该是)
+		完全平衡二叉树时最优，层数为O(logn)；空间复杂度O(logn)
+		最坏退化为链表，O(n)
+		(因为函数压栈退出跟层数有关)
 */
 // func isSymmetric(root *TreeNode) bool {
 // 	return check(root, root)
