@@ -68,8 +68,9 @@ package lc
 	Your runtime beats 100 % of golang submissions
 	Your memory usage beats 60 % of golang submissions (2.1 MB)
 	时间O(n)，
-	空间并不是O(1)，需要递归，最优递归判断次数最大log(n)+1，最坏n
-	(完全平衡二叉树层数<=log2(n)+1，不过若树退化为链表，则层数为n)(高度为层数-1)
+	空间并不是O(1)，需要递归
+	(树层数最大log(n)+1，最小n。完全平衡二叉树层数<=log2(n)+1，不过若树退化为链表，则层数为n)(高度为层数-1)
+	空间复杂度应该是每个节点都递归到，O(n)，而不是层数
 */
 func isSameTree(p *TreeNode, q *TreeNode) bool {
 	if p == nil && q == nil {
