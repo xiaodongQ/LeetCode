@@ -51,10 +51,26 @@ package lc
 
 // @lc code=start
 /*
-	进制转换，数字转换为26进制
+	进制转换，数字转换为26进制 Z进一位变成 AA (从1开始)
+	用一个slice保存，最后翻转
+	18/18 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 100 % of golang submissions (1.9 MB)
+	时间O(n)，空间O(n) (除结果外O(1))
 */
 func convertToTitle(n int) string {
+	var s []byte
+	for n > 0 {
+		n--
+		c := byte(n%26 + 'A')
+		s = append(s, c)
+		n /= 26
+	}
+	for i := 0; i < len(s)/2; i++ {
+		s[i], s[len(s)-1-i] = s[len(s)-1-i], s[i]
+	}
 
+	return string(s)
 }
 
 // @lc code=end
