@@ -58,10 +58,71 @@ package lc
 // }
 
 /*
+	移动k次，每次1步
+	时间O(k*n)，空间O(1)
+	35/35 cases passed (108 ms)
+	Your runtime beats 12.38 % of golang submissions
+	Your memory usage beats 25 % of golang submissions (3.2 MB)
+*/
+// func rotate(nums []int, k int) {
+// 	for i := 0; i < k; i++ {
+// 		// 第一个位置处，前一个值为最后一个元素
+// 		pre := nums[len(nums)-1]
+// 		for j := 0; j < len(nums); j++ {
+// 			// 本次位置赋值为前一个位置，并更新前一个位置为本位置原来的值
+// 			nums[j], pre = pre, nums[j]
+// 		}
+// 	}
+// }
 
- */
+/*
+	使用环状替换，替换时 每次+k位置 进行替换，起始和结束位置相同则结束一轮
+		记录移动的元素个数，个数和数组大小相同则说明都移动完了
+	(参考官方题解[旋转数组](https://leetcode-cn.com/problems/rotate-array/solution/xuan-zhuan-shu-zu-by-leetcode/))
+	35/35 cases passed (4 ms)
+	Your runtime beats 94.9 % of golang submissions
+	Your memory usage beats 25 % of golang submissions (3.2 MB)
+	时间O(n) 每个元素只移动一次，空间O(1)
+
+	自己最开始的方式是 i移动到 (i+k)/n位置，移动n次，
+	但是出现k个之后的元素其实是原来位置移动过来的，这些位置原有数据丢失，解法错误
+*/
+// func rotate(nums []int, k int) {
+// 	count := 0
+// 	for i := 0; count < len(nums); i++ {
+// 		start := i
+// 		pre := nums[start]
+// 		next := (start + k) % len(nums)
+// 		for start != next {
+// 			pre, nums[next] = nums[next], pre
+// 			count++
+// 			next = (next + k) % len(nums)
+// 		}
+// 		// 还差一次第一个
+// 		pre, nums[next] = nums[next], pre
+// 		count++
+// 	}
+// }
+
+/*
+	使用反转，最终尾部的 k%n 个元素移动到数组头部，其他元素都后移
+	所以可以总数组先反转，再反转前k%n个，再反转剩下的元素
+
+	35/35 cases passed (4 ms)
+	Your runtime beats 94.9 % of golang submissions
+	Your memory usage beats 25 % of golang submissions (3.2 MB)
+	时间O(n) 每个元素访问两次，2n，空间O(1)
+*/
 func rotate(nums []int, k int) {
+	roReverse(nums)
+	roReverse(nums[:k%len(nums)])
+	roReverse(nums[k%len(nums):])
+}
 
+func roReverse(nums []int) {
+	for i := 0; i < len(nums)/2; i++ {
+		nums[i], nums[len(nums)-1-i] = nums[len(nums)-1-i], nums[i]
+	}
 }
 
 // @lc code=end
