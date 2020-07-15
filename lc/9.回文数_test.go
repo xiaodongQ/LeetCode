@@ -77,7 +77,9 @@ package lc
 	Your memory usage beats 88 % of golang submissions (5.2 MB)
 时间O(logn)，空间O(1)
 */
-func isPalindrome(x int) bool {
+// 防止同一个包里的函数冲突，暂时重命名一下
+// func isPalindrome(x int) bool {
+func isPalindrome1(x int) bool {
 	// 负数不为回文
 	// 个位数除为回文
 	// 个位为0的数，除0外都不为回文
