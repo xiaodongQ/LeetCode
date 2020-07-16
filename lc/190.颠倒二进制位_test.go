@@ -1,9 +1,5 @@
 package lc
 
-import (
-	"strconv"
-)
-
 /*
  * @lc app=leetcode.cn id=190 lang=golang
  *
@@ -62,20 +58,60 @@ import (
 	Your runtime beats 60.23 % of golang submissions
 	Your memory usage beats 50 % of golang submissions (2.6 MB)
 */
+// func reverseBits(num uint32) uint32 {
+// 	s := make([]byte, 32)
+// 	s1 := []byte(strconv.FormatUint(uint64(num), 2))
+// 	// 高位0不显示，凑成32位
+// 	zeros := make([]byte, 32-len(s1))
+// 	for i := 0; i < len(zeros); i++ {
+// 		zeros[i] = '0'
+// 	}
+// 	copy(s, append(zeros, s1...))
+// 	for i := 0; i < len(s)/2; i++ {
+// 		s[i], s[len(s)-1-i] = s[len(s)-1-i], s[i]
+// 	}
+// 	res, _ := strconv.ParseUint(string(s), 2, 32)
+// 	return uint32(res)
+// }
+
+/*
+	直接每位操作
+	600/600 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 50 % of golang submissions (2.5 MB)
+	时间O(1) 固定操作32位，可以看做log(N) N为位数，空间O(1)
+*/
 func reverseBits(num uint32) uint32 {
-	s := make([]byte, 32)
-	s1 := []byte(strconv.FormatUint(uint64(num), 2))
-	// 高位0不显示，凑成32位
-	zeros := make([]byte, 32-len(s1))
-	for i := 0; i < len(zeros); i++ {
-		zeros[i] = '0'
+	var res uint32
+	for i := 0; i < 32; i++ {
+		// 也可以低位直接放到最终位置，res += ((num&0x01)<<(31-i))，这种方式i从31开始比较简洁一点
+		res = res<<1 + num&0x01
+		num >>= 1
 	}
-	copy(s, append(zeros, s1...))
-	for i := 0; i < len(s)/2; i++ {
-		s[i], s[len(s)-1-i] = s[len(s)-1-i], s[i]
-	}
-	res, _ := strconv.ParseUint(string(s), 2, 32)
-	return uint32(res)
+	return res
 }
+
+/*
+	若要求不用循环，可以用 189.旋转数组 中的方式，交换两部分数据，再拆分数据直到间隔为1
+	两个16位交换 -> 两部分分别操作：两个8位交换
+
+	600/600 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 50 % of golang submissions (2.5 MB)
+	时间O(1)，空间O(1)
+*/
+// func reverseBits(num uint32) uint32 {
+// 	num = (num >> 16) | (num << 16)
+// 	// 每8位交换
+// 	num = ((num & 0xff00ff00) >> 8) | ((num & 0x00ff00ff) << 8)
+// 	// 每4位
+// 	num = ((num & 0xf0f0f0f0) >> 4) | ((num & 0x0f0f0f0f) << 4)
+// 	// 每2位 1100:c; 0011:3
+// 	num = ((num & 0xcccccccc) >> 2) | ((num & 0x33333333) << 2)
+// 	// 每1位 1010:a; 0101:5
+// 	num = ((num & 0xaaaaaaaa) >> 1) | ((num & 0x55555555) << 1)
+
+// 	return num
+// }
 
 // @lc code=end
