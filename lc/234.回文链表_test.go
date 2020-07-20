@@ -122,7 +122,7 @@ package lc
 	Your memory usage beats 100 % of golang submissions (6 MB)
 	时间O(n) n+n/2+n+n/2，空间O(1)
 */
-func isPalindrome(head *ListNode) bool {
+func isPalindrome2(head *ListNode) bool {
 	if head == nil {
 		return true
 	}

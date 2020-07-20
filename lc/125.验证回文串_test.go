@@ -103,7 +103,7 @@ func TestIsPalindrome(t *testing.T) {
 	Your memory usage beats 100 % of golang submissions (2.7 MB)
 	时间O(n)，空间O(1)
 */
-func isPalindrome(s string) bool {
+func isPalindrome3(s string) bool {
 	l, r := 0, len(s)-1
 	for l <= r {
 		lc, ok1 := valid(s[l])
