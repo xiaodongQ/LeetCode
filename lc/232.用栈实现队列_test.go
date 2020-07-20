@@ -50,37 +50,38 @@ package lc
  */
 
 // @lc code=start
-type MyQueue struct {
-	data []int
-}
+// 先注释下面的内容，同一个package里面有同名的函数，导致debug其他文件失败
+// type MyQueue struct {
+// 	data []int
+// }
 
-/** Initialize your data structure here. */
-func Constructor() MyQueue {
-	return MyQueue{}
-}
+// /** Initialize your data structure here. */
+// func Constructor() MyQueue {
+// 	return MyQueue{}
+// }
 
-/** Push element x to the back of queue. */
-func (this *MyQueue) Push(x int) {
-	this.data = append(this.data, x)
-}
+// /** Push element x to the back of queue. */
+// func (this *MyQueue) Push(x int) {
+// 	this.data = append(this.data, x)
+// }
 
-/** Removes the element from in front of queue and returns that element. */
-func (this *MyQueue) Pop() int {
-	// FIFO
-	res := this.data[0]
-	this.data = this.data[1:]
-	return res
-}
+// /** Removes the element from in front of queue and returns that element. */
+// func (this *MyQueue) Pop() int {
+// 	// FIFO
+// 	res := this.data[0]
+// 	this.data = this.data[1:]
+// 	return res
+// }
 
-/** Get the front element. */
-func (this *MyQueue) Peek() int {
-	return this.data[0]
-}
+// /** Get the front element. */
+// func (this *MyQueue) Peek() int {
+// 	return this.data[0]
+// }
 
-/** Returns whether the queue is empty. */
-func (this *MyQueue) Empty() bool {
-	return len(this.data) == 0
-}
+// /** Returns whether the queue is empty. */
+// func (this *MyQueue) Empty() bool {
+// 	return len(this.data) == 0
+// }
 
 /**
  * Your MyQueue object will be instantiated and called as such:
