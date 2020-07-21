@@ -57,28 +57,29 @@ func TestRotateRight(t *testing.T) {
  * }
  */
 /*
-错误：
 	借助临时空间(不能有环)，重建链表
-	有环就死循环了
+	有环就死循环了(若考虑有环需要判断是否回到开头)
+	231/231 cases passed (4 ms)
+	Your runtime beats 59.74 % of golang submissions
+	Your memory usage beats 50 % of golang submissions (2.7 MB)
+	时间O(n)，空间O(n)
 */
 // func rotateRight(head *ListNode, k int) *ListNode {
+// 	if head == nil {
+// 		return head
+// 	}
 // 	s := make([]*ListNode, 0)
 // 	for head != nil {
 // 		s = append(s, head)
 // 		head = head.Next
-// 		log.Printf("111len:%d", len(s))
 // 	}
 // 	start := (len(s) - k%len(s)) % len(s)
 // 	res := s[start]
-// 	log.Printf("len:%d, start:%d", len(s), start)
 // 	for i := 0; i < len(s)-1; i++ {
 // 		s[(start+i)%len(s)].Next = s[(start+i+1)%len(s)]
-// 		log.Printf("i:%d, (start+i)modlen(s):%d, (start+i+1)modlen(s):%d",
-// 			i, (start+i)%len(s), (start+i+1)%len(s))
 // 	}
 // 	// 原来的尾节点需要断开，否则新的链表有环
-// 	s[len(s)-k%len(s)].Next = nil
-// 	log.Printf("end")
+// 	s[len(s)-k%len(s)-1].Next = nil
 
 // 	return res
 // }
