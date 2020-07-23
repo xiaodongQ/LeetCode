@@ -42,8 +42,60 @@ package lc
  */
 
 // @lc code=start
+/*
+	找两个有序数组的中间节点，两个则平均，
+	奇数则(m+n)/2的下标；偶数则(m+n)/2 - 1 和 (m+n)/2
+	由于要求O(log(m+n))，一般会用到二分思想
+	长度m和n，k 和 (m+n)/2 比较，若小于则可过滤一半数据，根据情况判断是两个数组各自哪一半
+*/
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
-	return -1
+	total := len(nums1) + len(nums2)
+	mid := total / 2
+	if total%2 == 0 {
+		return float64(findKth(nums1, nums2, mid-1)+findKth(nums1, nums2, mid)) / 2.0
+	}
+	return float64(findKth(nums1, nums2, mid))
+}
+
+func findKth(nums1 []int, nums2 []int, k int) int {
+	for {
+		m1 := len(nums1) / 2
+		m2 := len(nums2) / 2
+		mid := (len(nums1) + len(nums2)) / 2
+
+		// 终止条件
+		if len(nums1) == 0 {
+			// 则剩余要找的数在nums2中
+			return nums2[k]
+		} else if len(nums2) == 0 {
+			return nums1[k]
+		} else if k == 0 {
+			// 只剩下一个数要找，则取小的那个头结点
+			if nums1[0] <= nums2[0] {
+				return nums1[0]
+			} else {
+				return nums2[0]
+			}
+		}
+
+		// k在总数的左半部分则过滤大于的数组的右半边
+		if k <= mid {
+			if nums1[m1] <= nums2[m2] {
+				nums2 = nums2[:m2]
+			} else {
+				nums1 = nums1[:m1]
+			}
+		} else {
+			// 过滤左边
+			if nums1[m1] <= nums2[m2] {
+				nums1 = nums1[m1+1:]
+				k -= m1 + 1
+			} else {
+				nums2 = nums2[m2+1:]
+				k -= m2 + 1
+			}
+		}
+	}
 }
 
 // @lc code=end

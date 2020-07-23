@@ -62,6 +62,15 @@ func TestSortedListToBST(t *testing.T) {
 /*
 	中间节点作为根节点，分前后两部分进行递归，
 	前一部分的链表需要从中间节点的左侧断开(中间节点使用后其之前的节点不能指向它了)
+
+中间取左侧(左侧多了一些nil节点，取右侧更简洁)：
+	32/32 cases passed (4 ms)
+	Your runtime beats 99.26 % of golang submissions
+	Your memory usage beats 100 % of golang submissions (6.2 MB)
+中间取右侧：
+	32/32 cases passed (4 ms)
+	Your runtime beats 99.26 % of golang submissions
+	Your memory usage beats 100 % of golang submissions (6.1 MB)
 */
 func sortedListToBST(head *ListNode) *TreeNode {
 	if head == nil {
@@ -70,12 +79,23 @@ func sortedListToBST(head *ListNode) *TreeNode {
 	mid := findMiddle(head)
 	tree := &TreeNode{Val: mid.Val}
 	// 需要考虑只有一个节点的情况
+	// 偶数取右边，这里没有问题，
+	/*
+		若取左边不能直接return，
+		如果是两个节点取左边，则该节点还要断开和后续的连接
+	*/
+	// 取右侧中间
 	if head == mid {
 		return tree
 	}
 
+	// 取左侧中间(left不用继续，虽然tree的left置nil了，但原链表head还是指向下一个节点，并没有断开)
+	// if head == mid {
+	// 	head = nil
+	// }
 	tree.Left = sortedListToBST(head)
 	tree.Right = sortedListToBST(mid.Next)
+
 	return tree
 }
 
@@ -85,7 +105,14 @@ func findMiddle(head *ListNode) *ListNode {
 	}
 	slow, fast := head, head
 	var pre *ListNode
-	for fast.Next != nil && fast.Next.Next != nil {
+	// 此处偶数取左边
+	// for fast.Next != nil && fast.Next.Next != nil {
+	// 	pre = slow
+	// 	slow = slow.Next
+	// 	fast = fast.Next.Next
+	// }
+	// 此处偶数取右边
+	for fast != nil && fast.Next != nil {
 		pre = slow
 		slow = slow.Next
 		fast = fast.Next.Next
