@@ -94,6 +94,43 @@ import "sort"
 	Your memory usage beats 66.67 % of golang submissions (6.9 MB)
 
 */
+// func threeSum(nums []int) [][]int {
+// 	sort.Ints(nums)
+// 	res := [][]int{}
+// 	for i := 0; i < len(nums); i++ {
+// 		// 去重，同a值并不需要再遍历
+// 		if i > 0 && nums[i] == nums[i-1] {
+// 			continue
+// 		}
+// 		a := nums[i]
+// 		// c的位置
+// 		third := len(nums) - 1
+// 		for j := i + 1; j < len(nums); j++ {
+// 			// 去重
+// 			if j > i+1 && nums[j] == nums[j-1] {
+// 				continue
+// 			}
+// 			b := nums[j]
+
+// 			// 这里是精髓，双指针，移动右边指针
+// 			for b < nums[third] && b+nums[third] > -a {
+// 				third--
+// 			}
+// 			if j == third {
+// 				// c左移到了当前取b的位置(并不是数组值为b)
+// 				break
+// 			}
+
+// 			if a+b+nums[third] == 0 {
+// 				res = append(res, []int{a, b, nums[third]})
+// 			}
+// 		}
+// 	}
+
+// 	return res
+// }
+
+// 和上面是一样的，对双指针改写一下，理解更直观
 func threeSum(nums []int) [][]int {
 	sort.Ints(nums)
 	res := [][]int{}
@@ -102,27 +139,26 @@ func threeSum(nums []int) [][]int {
 		if i > 0 && nums[i] == nums[i-1] {
 			continue
 		}
-		a := nums[i]
-		// c的位置
-		third := len(nums) - 1
-		for j := i + 1; j < len(nums); j++ {
-			// 去重
-			if j > i+1 && nums[j] == nums[j-1] {
-				continue
-			}
-			b := nums[j]
-
-			// 这里是精髓，双指针，移动右边指针
-			for b < nums[third] && b+nums[third] > -a {
-				third--
-			}
-			if j == third {
-				// c左移到了当前取b的位置(并不是数组值为b)
-				break
-			}
-
-			if a+b+nums[third] == 0 {
-				res = append(res, []int{a, b, nums[third]})
+		target := -nums[i]
+		low := i + 1
+		high := len(nums) - 1
+		for low < high {
+			twoSum := nums[low] + nums[high]
+			if twoSum == target {
+				res = append(res, []int{nums[i], nums[low], nums[high]})
+				// 去重，相同的值肯定不会用到了
+				low++
+				high--
+				for low < high && nums[low] == nums[low-1] {
+					low++
+				}
+				for low < high && nums[high] == nums[high+1] {
+					high--
+				}
+			} else if twoSum < target {
+				low++
+			} else {
+				high--
 			}
 		}
 	}
