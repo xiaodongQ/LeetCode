@@ -58,38 +58,58 @@ package lc
 	1 3 2， 2 3 1也不行，3也要交换位置
 	针对不同的用例又踩不同的坑了。。。按用例修改问题并不简单
 
-	找第一个后面(i)比前面(i-1)大的数，互换后，将原来i-1的数放到合适位置，再将i位置后面的数据倒排
+	找第一个后面(i)比前面(i-1)大的数，~~互换后~~(删除该句)，将原来i-1的数放到合适位置(跟第一个大于它的数互换)，再将i位置后面的数据倒排
 		前面不符合用例，主要是没考虑到后面是从大到小排列的
+	265/265 cases passed (4 ms)
+	Your runtime beats 69.32 % of golang submissions
+	Your memory usage beats 100 % of golang submissions (2.5 MB)
 */
+// func nextPermutation(nums []int) {
+// 	i := len(nums) - 1
+// 	for ; i > 0; i-- {
+// 		if nums[i] > nums[i-1] {
+// 			// 从最后开始找一个比 nums[i-1]大的数
+// 			j := len(nums) - 1
+// 			for j > i && nums[j] <= nums[i-1] {
+// 				j--
+// 			}
+// 			// 交换位置i-1和j位置的值，并不改变i-1(从i开始)之后的相对顺序
+// 			nums[i-1], nums[j] = nums[j], nums[i-1]
+
+// 			// i及之后是从大到小的，倒转成从小到大
+// 			myReverse(nums[i:])
+// 			return
+// 		}
+// 	}
+// 	if i == 0 {
+// 		// 倒排
+// 		myReverse(nums)
+// 	}
+// }
+
+// 跟上面思路一样，可以更简洁一点，直接找i-1和j，若存在则交换，最后倒置
 func nextPermutation(nums []int) {
 	i := len(nums) - 1
-	for ; i > 0; i-- {
-		if nums[i] > nums[i-1] {
-
-			// 从最后开始找一个比 nums[i-1]大的数
-			for j := len(nums) - 1; j >= i; j-- {
-				if nums[j] <= nums[i-1] {
-					continue
-				}
-				// 交换nums[i-1]和找到的nums[j]
-				nums[j], nums[i-1] = nums[i-1], nums[j]
-
-				// 把交换的数放到从右边起第一个比它小的位置
-				k := len(nums) - 1
-				for k > j && nums[j] < nums[k] {
-					k--
-				}
-				nums[k], nums[j] = nums[j], nums[k]
-
-				return
-			}
-		}
+	// 找到第一个nums[i]>nums[i-1]的i (没有则最后i=0)
+	for i > 0 && nums[i] <= nums[i-1] {
+		i--
 	}
-	if i == 0 {
-		// 倒排
-		for j := 0; j < len(nums)/2; j++ {
-			nums[j], nums[len(nums)-1-j] = nums[len(nums)-1-j], nums[j]
+	if i > 0 {
+		// 找i之后第一个>nums[i-1]的位置
+		j := len(nums) - 1
+		for j > i && nums[j] <= nums[i-1] {
+			j--
 		}
+
+		// 交换nums[i-1]和nums[j]，不影响i及后面的相对顺序
+		nums[i-1], nums[j] = nums[j], nums[i-1]
+	}
+	myReverse(nums[i:])
+}
+
+func myReverse(nums []int) {
+	for j := 0; j < len(nums)/2; j++ {
+		nums[j], nums[len(nums)-1-j] = nums[len(nums)-1-j], nums[j]
 	}
 }
 
