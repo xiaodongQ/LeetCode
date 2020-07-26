@@ -79,7 +79,7 @@ type NumArray struct {
 	sum []int
 }
 
-func Constructor(nums []int) NumArray {
+func Constructor1(nums []int) NumArray {
 	sum := make([]int, len(nums))
 
 	for i := 0; i < len(nums); i++ {
