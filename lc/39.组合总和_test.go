@@ -71,49 +71,56 @@ func TestCombinationSum(t *testing.T) {
 
 // @lc code=start
 /*
-	n数之和的思路
-	递归，从数组里找满足相加等于target的数
+	回溯
+	候选数组先排序，依次从开始去找能组成和为 target-candidates[pos] 的数，
+	直到剩余的和==0则说明符合条件，放到结果里(DFS深度遍历)
+	剩余的和<0则说明不符合条件，终止本次递归
+
+	168/168 cases passed (0 ms)
+	Your runtime beats 100 % of golang submissions
+	Your memory usage beats 77.5 % of golang submissions (2.7 MB)
+	时间O(2^n)，空间O(2^n)
+		可以理解为每个数据平均判断两次，是否加到path(DFS)，所以时间为O(2^n)
+		空间也是O(2^n)，没大理解；由于可以拿重复元素，每轮回溯不一定只有n轮调用栈，所以不是O(n)
+
+		let s = target / min(nums[i]) T = C(s,1) + C(s, 2) + ... + C(s, s) = 2^s
+		分析参考：[Combination - 1 Method for 6 Problems (39, 40, 77, 78, 90, 216)](https://leetcode.com/problems/combination-sum/discuss/389405/Combination-1-Method-for-6-Problems-(39-40-77-78-90-216))
 */
 func combinationSum(candidates []int, target int) [][]int {
 	res := [][]int{}
 	sort.Ints(candidates)
-	n := len(candidates)
-	// 从最右开始，至少有一个该位置值
-	right := n - 1
-	for right >= 0 && candidates[right] > target {
-		right--
-	}
-	log.Printf("right:%d", right)
-	if right < 0 {
-		return nil
-	}
 
-	for right >= 0 {
-		var r1 []int
-		combHelper(candidates, right, target, r1)
-		if len(r1) != 0 {
-			res = append(res, r1)
-		}
-
-		right--
-	}
+	path := []int{}
+	backtrack(candidates, target, 0, &res, path)
 
 	return res
 }
 
-// 题目中已知成员>=1
-func combHelper(candidates []int, right, target int, res []int) {
-	if target <= 0 || right < 0 {
+// pos用于记录从哪个位置开始找，避免重复结果
+// path用于记录本次遍历过的数据
+func backtrack(candidates []int, target int, pos int, res *[][]int, path []int) {
+	if target == 0 {
+		// 复制一个新的slice，避免复用底层数组时后面修改会影响本次结果
+		temp := make([]int, len(path))
+		copy(temp, path)
+		*res = append(*res, temp)
 		return
 	}
-	if candidates[right] == target {
-		res = append(res, target)
+	if target < 0 {
 		return
 	}
-	remain := target - candidates[right]
-	combHelper(candidates, right, remain, res)
-
-	return
+	for i := pos; i < len(candidates); i++ {
+		// 候选有序数组中第一个数就比和要大，则肯定没有符合记录的数
+		if target < candidates[i] {
+			return
+		}
+		// 添加到遍历集中进行下一次回溯
+		path = append(path, candidates[i])
+		// 回溯，pos位置从本记录(i)开始
+		backtrack(candidates, target-candidates[i], i, res, path)
+		// 本次位置回溯完后，从path里删除，用于下一次回溯
+		path = path[:len(path)-1]
+	}
 }
 
 // @lc code=end
