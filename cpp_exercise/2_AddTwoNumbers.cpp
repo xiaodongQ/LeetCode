@@ -32,16 +32,61 @@ struct ListNode {
  */
 class Solution {
 public:
+    // ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    //     int inc = 0;
+    //     ListNode* head = NULL;
+    //     ListNode* tail = NULL;
+
+    //     while (l1 || l2) {
+    //         int v1 = l1 ? l1->val : 0;
+    //         int v2 = l2 ? l2->val : 0;
+    //         int sum = v1+v2+inc;
+    //         inc = sum/10;
+    //         if (!head) {
+    //             head = tail = new ListNode(sum%10);
+    //         }else{
+    //             tail->next = new ListNode(sum%10);
+    //             tail = tail->next;
+    //         }
+    //         if (l1) {
+    //             l1 = l1->next;
+    //         }
+    //         if (l2) {
+    //             l2 = l2->next;
+    //         }
+    //     }
+    //     if (inc == 1) {
+    //         tail->next = new ListNode(inc);
+    //     }
+    //     return head;
+    // }
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        //传入的是已经拆分好了的数字链表，遍历叠加即可，注意链表结束的边界条件
-        //确保传入的是非空链表
-        if (NULL == l1 || NULL == l2) {
-            return NULL;
+        int inc = 0;
+        ListNode* head = NULL;
+        ListNode* tail = NULL;
+
+        while (l1 || l2) {
+            int sum = 0;
+            sum += inc;
+            if (l1) {
+                sum += l1->val;
+                l1 = l1->next;
+            }
+            if (l2) {
+                sum += l2->val;
+                l2 = l2->next;
+            }
+            inc = sum/10;
+            if (!head){
+                head = tail = new ListNode(sum%10);
+            } else {
+                tail->next = new ListNode(sum%10);
+                tail = tail->next;
+            }
         }
-        int flag = 0;
-        while(l1->next != NULL && l2->next != NULL)
-        {
-            
+        if (inc == 1) {
+            tail->next = new ListNode(inc);
         }
+        return head;
     }
 };
