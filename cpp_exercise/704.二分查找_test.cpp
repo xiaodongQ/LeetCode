@@ -46,25 +46,51 @@
 // @lc code=start
 class Solution {
 public:
+    // 左闭右闭区间：[]
+/*
     int search(vector<int>& nums, int target) {
         int left = 0;
         int right = nums.size() - 1;
-        // 需要注意步进的边界，容易出现左右下标死循环
+        // left == right是有意义的，所以使用 <=
         while (left <= right) {
             // 避免溢出
             int mid = left + (right-left)/2;
             if (target == nums[mid]) {
                 return mid;
             }
-            // 保持循环不变性，保持左闭右闭区间
-            if (target > nums[mid]) {
-                left = mid + 1;
-            }else{
+            // [left, mid-1]
+            if (nums[mid] > target) {
                 right = mid - 1;
+            }else{
+                // [mid+1, right]
+                left = mid + 1;
             }
         }
         return -1;
     }
+*/
+
+    // 左闭右开区间，[)
+    int search(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size();
+        while (left < right) {
+            int mid = left + (right-left)/2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            // 左区间 [)
+            if (nums[mid] > target) {
+                right = mid;
+            } else {
+                // 右区间
+                left = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
 };
 // @lc code=end
 
