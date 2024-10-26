@@ -34,9 +34,10 @@ target_link_libraries(
 add_executable(
 	prefix_sum_test
 	prefix_sum_test.cpp
+	prefix_sum.cpp
 )
 # 添加依赖关系
-target_link_libraries(prefix_sum_test gtest gtest_main)
+target_link_libraries(prefix_sum_test GTest::gtest_main)
 
 include(GoogleTest)
-gtest_discover_tests(prefix_sum)
+gtest_discover_tests(prefix_sum_test)
