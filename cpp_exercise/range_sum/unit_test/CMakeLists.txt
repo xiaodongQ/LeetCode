@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.14)
-project(my_project)
+#cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.5)
+project(prefix_sum_test)
 
 # 设置编译器标志
 # GoogleTest requires at least C++14
@@ -19,17 +20,6 @@ FetchContent_MakeAvailable(googletest)
 # 添加子目录，包含 Google Test
 enable_testing()
 
-# 添加源文件
-add_executable(
-  prefix_sum
-  prefix_sum.cpp
-)
-# 添加依赖关系
-target_link_libraries(
-  prefix_sum
-  GTest::gtest_main
-)
-
 # 添加单元测试
 add_executable(
 	prefix_sum_test
@@ -37,7 +27,8 @@ add_executable(
 	prefix_sum.cpp
 )
 # 添加依赖关系
-target_link_libraries(prefix_sum_test GTest::gtest_main)
+target_link_libraries(prefix_sum_test gtest gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(prefix_sum_test)
+
