@@ -91,16 +91,22 @@ public:
     }
     
     int get(int index) {
-        if (index > size - 1) {
-            return;
+        // 题目的约束中限制了`>=0`，实际还是显式判断下不能`<0`
+        if (index > size - 1 || index < 0) {
+            return -1;
         }
 
-        // 遍历到index前一个节点
-        LinkedNode *cur = dummyHead;
-        for (int i = 0; i < index - 1; i++) {
+        // 从第一个节点（index下标为0）开始遍历
+        LinkedNode *cur = dummyHead->next;
+
+        // for (int i = 0; i < index; i++) {
+        //     cur = cur->next;
+        // }
+        // while循环更简洁一点，不用临时变量
+        while (index--) {
             cur = cur->next;
         }
-        return cur->next->val;
+        return cur->val;
     }
     
     void addAtHead(int val) {
@@ -121,13 +127,20 @@ public:
         size++;
     }
     
+    // 插入到index前面
     void addAtIndex(int index, int val) {
+        // 写边界时，可代入一个特殊值，如size=1时，须满足index<=1，两者相等时插入到队尾
         if (index > size) {
             return;
         }
-        // 遍历到index前一个节点
+        // 虽然题目有边界，index<0的边界还是显式处理下
+        if (index < 0) {
+            index = 0;
+        }
+
+        // 遍历到index前一个节点，需要从虚拟头开始
         LinkedNode *cur = dummyHead;
-        for (int i = 0; i < index - 1; i++) {
+        while (index--) {
             cur = cur->next;
         }
         LinkedNode *node = new LinkedNode(val);
@@ -137,12 +150,13 @@ public:
     }
     
     void deleteAtIndex(int index) {
-        if (index > size) {
+        // 虽然题目边界index>=0，实际编程中还是硬性判断一下
+        if (index > size - 1) {
             return;
         }
         // 遍历到index前一个节点
         LinkedNode *cur = dummyHead;
-        for (int i = 0; i < index - 1; i++) {
+        while (index--) {
             cur = cur->next;
         }
         LinkedNode *node = cur->next;
