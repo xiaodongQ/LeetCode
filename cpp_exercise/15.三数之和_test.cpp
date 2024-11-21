@@ -12,6 +12,11 @@ public:
         // 记住先得排序
         sort(nums.begin(), nums.end());
         for (int i = 0; i < nums.size(); i++) {
+            // 排序后的第一个元素>0则不可能满足求和=0，可提前退出
+            if (nums[i] > 0) {
+                break;
+            }
+
             // 这里要做一道去重
             if (i > 0 && nums[i] == nums[i-1]) {
                 continue;
