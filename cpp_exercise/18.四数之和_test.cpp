@@ -11,10 +11,10 @@ public:
         vector<vector<int>> result;
         // 先排序
         sort(nums.begin(), nums.end());
-        // 利用双指针法从从有序数组里找四元组
-        for (int i = 0; i < nums.size() - 3; i++) {
-            // 优化：提前退出
-            if (nums[i] > target) {
+        // 利用双指针法从从有序数组里找四元组，没必要nums.size()-2，否则要单独处理数组大小<2的情况
+        for (int i = 0; i < nums.size(); i++) {
+            // 减枝优化：提前退出，target可能为负数，所以需要另外加条件
+            if (nums[i] > target && nums[i] >= 0) {
                 break;
             }
             // 第一层去重
@@ -22,12 +22,12 @@ public:
                 continue;
             }
 
-            for (int j = i+1; j < nums.size() - 2; j++) {
-                // 优化：提前退出
-                if (nums[i] + nums[j] > target) {
+            for (int j = i+1; j < nums.size(); j++) {
+                // 减枝优化：提前退出
+                if (nums[i] + nums[j] > target && nums[j] >= 0) {
                     break;
                 }
-                // 第二层去重
+                // 第二层去重（这里不用担心和第一个数值重复时被去重了）
                 if (j > i+1 && nums[j] == nums[j-1]) {
                     continue;
                 }
@@ -36,9 +36,9 @@ public:
                 int left = j + 1;
                 int right = nums.size() - 1;
                 while (left < right) {
-                    if (nums[i] + nums[j] + nums[left] + nums[right] > target) {
+                    if ((long)nums[i] + nums[j] + nums[left] + nums[right] > target) {
                         right--;
-                    } else if (nums[i] + nums[j] + nums[left] + nums[right] < target) {
+                    } else if ((long)nums[i] + nums[j] + nums[left] + nums[right] < target) {
                         left++;
                     } else {
                         // 满足条件，组织结果记录
